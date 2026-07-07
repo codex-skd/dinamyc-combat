@@ -22,7 +22,6 @@
     "client.ClientPlayerInteractionManagerMixin",
     "client.ClientPlayNetworkHandlerMixin",
     "client.EntityHitboxDebugRendererMixin",
-    "client.InGameHudInject",
     "client.ItemStackTooltipMixin",
     "client.MinecraftClientAccessor",
     "client.MinecraftClientInject"

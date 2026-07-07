@@ -1,7 +1,6 @@
 package com.skd.dinamyccombat.mixin.client;
 
 import com.skd.dinamyccombat.config.ClientConfig;
-import com.skd.dinamyccombat.config.ServerConfig;
 import com.skd.dinamyccombat.logic.ClientPlayerAttackProperties;
 import com.skd.dinamyccombat.logic.WeaponRegistry;
 import com.skd.dinamyccombat.mixin.player.PlayerInventoryAccessor;
@@ -32,19 +31,6 @@ public abstract class ClientPlayerEntityMixin implements ClientPlayerAttackPrope
 
     @Unique
     private boolean dinamyc_combat$isAttackKeyHeld = false;
-
-    @Inject(method = "attack", at = @At("HEAD"))
-    private void dinamyc_combat$onClientAttack(Entity target, CallbackInfo ci) {
-        LocalPlayer self = (LocalPlayer) (Object) this;
-        int currentTime = self.tickCount;
-        if (currentTime - dinamyc_combat$clientLastAttackTime < 40) {
-            dinamyc_combat$clientComboCount++;
-        } else {
-            dinamyc_combat$clientComboCount = 1;
-        }
-        dinamyc_combat$clientLastAttackTime = currentTime;
-        dinamyc_combat$clientComboTimeout = 40;
-    }
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void dinamyc_combat$onClientTick(CallbackInfo ci) {

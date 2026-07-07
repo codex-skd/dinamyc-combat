@@ -1,7 +1,6 @@
 package com.skd.dinamyccombat.mixin;
 
 import com.skd.dinamyccombat.logic.InventoryUtil;
-import com.skd.dinamyccombat.mixin.player.PlayerEntityAccessor;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.InteractionHand;
@@ -22,7 +21,7 @@ public abstract class ServerPlayNetworkHandlerMixin {
             require = 0)
     public ItemStack dinamyc_combat$getStackInHand(ServerPlayer instance, InteractionHand hand) {
         return switch (hand) {
-            case MAIN_HAND -> ((PlayerEntityAccessor) instance).getInventory().getSelected();
+            case MAIN_HAND -> instance.getMainHandItem();
             case OFF_HAND -> InventoryUtil.getOffHandSlotStack(instance);
         };
     }

@@ -12,6 +12,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
+import org.slf4j.Logger;
+import com.mojang.logging.LogUtils;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -22,6 +24,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Minecraft.class)
 public abstract class MinecraftClientInject {
+
+    private static final Logger LOGGER = LogUtils.getLogger();
 
     @Shadow
     public LocalPlayer player;
@@ -38,7 +42,7 @@ public abstract class MinecraftClientInject {
     @Unique
     private boolean dinamyc_combat$attackKeyWasDown = false;
 
-    @Inject(require = 0, method = "startAttack", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "startAttack", at = @At("HEAD"), cancellable = true)
     private void dinamyc_combat$onStartAttack(CallbackInfoReturnable<Boolean> cir) {
         if (player == null) {
             return;
@@ -61,6 +65,8 @@ public abstract class MinecraftClientInject {
             return;
         }
 
+        LOGGER.debug("Intercepting attack with weapon: {}", mainStack);
+
         int comboCount = 0;
         if (player instanceof ClientPlayerAttackProperties cprops) {
             comboCount = cprops.incrementAndGetComboCount(player.tickCount);
@@ -81,12 +87,14 @@ public abstract class MinecraftClientInject {
                 ((PlayerInventoryAccessor) player.getInventory()).getSelected(), cursorTarget, entityIds);
         ClientPacketDistributor.sendToServer(packet);
 
+        LOGGER.debug("Sent C2S_AttackRequest: combo={}, targets={}", comboCount, entityIds.length);
+
         player.swing(InteractionHand.MAIN_HAND);
         missTime = 0;
         cir.setReturnValue(false);
     }
 
-    @Inject(require = 0, method = "tick", at = @At("HEAD"))
+    @Inject(method = "tick", at = @At("HEAD"))
     private void dinamyc_combat$onTick(CallbackInfo ci) {
         if (player != null) {
             float cooldown = player.getAttackStrengthScale(0.5F);
@@ -96,7 +104,7 @@ public abstract class MinecraftClientInject {
         }
     }
 
-    @Inject(require = 0, method = "continueAttack", at = @At("HEAD"))
+    @Inject(method = "continueAttack", at = @At("HEAD"))
     private void dinamyc_combat$onContinueAttack(boolean bl, CallbackInfo ci) {
         if (player == null) {
             return;

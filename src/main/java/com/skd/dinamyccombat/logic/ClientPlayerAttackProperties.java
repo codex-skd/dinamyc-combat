@@ -11,4 +11,5 @@ public interface ClientPlayerAttackProperties {
     int getComboStep();
     int getComboTotal();
     void setComboState(int step, int total);
+    void markClickAttack();
 }

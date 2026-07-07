@@ -38,10 +38,7 @@ public abstract class ClientPlayerEntityMixin implements ClientPlayerAttackPrope
     private int dinamyc_combat$animEndTick = 0;
 
     @Unique
-    private int dinamyc_combat$comboStep = 0;
-
-    @Unique
-    private int dinamyc_combat$comboTotal = 0;
+    private boolean dinamyc_combat$justClicked = false;
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void dinamyc_combat$onClientTick(CallbackInfo ci) {
@@ -50,8 +47,6 @@ public abstract class ClientPlayerEntityMixin implements ClientPlayerAttackPrope
             dinamyc_combat$clientComboTimeout--;
             if (dinamyc_combat$clientComboTimeout == 0) {
                 dinamyc_combat$clientComboCount = 0;
-                dinamyc_combat$comboStep = 0;
-                dinamyc_combat$comboTotal = 0;
             }
         }
 
@@ -59,13 +54,18 @@ public abstract class ClientPlayerEntityMixin implements ClientPlayerAttackPrope
             dinamyc_combat$animationActive = false;
         }
 
+        if (dinamyc_combat$justClicked) {
+            dinamyc_combat$justClicked = false;
+            return;
+        }
+
         if (dinamyc_combat$isAttackKeyHeld && ClientConfig.IS_HOLD_TO_ATTACK_ENABLED.get()) {
             float cooldown = self.getAttackStrengthScale(0.5F);
             if (cooldown >= 0.9F && !dinamyc_combat$animationActive) {
-                var attrs = findActiveWeaponAttributes(self);
+                var attrs = WeaponRegistry.getAttributes(self.getMainHandItem());
+                if (attrs == null) attrs = WeaponRegistry.getAttributes(self.getOffhandItem());
                 if (attrs != null) {
                     int comboCount = incrementAndGetComboCount(self.tickCount);
-                    updateComboState(attrs, comboCount);
                     int cursorTarget = -1;
                     int[] entityIds = new int[0];
                     EntityHitResult hit = pickEntityTarget(self);
@@ -83,22 +83,6 @@ public abstract class ClientPlayerEntityMixin implements ClientPlayerAttackPrope
                     dinamyc_combat$animationActive = true;
                 }
             }
-        }
-    }
-
-    @Unique
-    private static com.skd.dinamyccombat.api.WeaponAttributes findActiveWeaponAttributes(LocalPlayer player) {
-        var mainAttrs = WeaponRegistry.getAttributes(player.getMainHandItem());
-        if (mainAttrs != null) return mainAttrs;
-        return WeaponRegistry.getAttributes(player.getOffhandItem());
-    }
-
-    @Unique
-    private void updateComboState(com.skd.dinamyccombat.api.WeaponAttributes attrs, int comboCount) {
-        if (attrs != null && attrs.attacks() != null && attrs.attacks().length > 0) {
-            int total = attrs.attacks().length;
-            dinamyc_combat$comboStep = (Math.abs(comboCount) % total) + 1;
-            dinamyc_combat$comboTotal = total;
         }
     }
 
@@ -158,18 +142,21 @@ public abstract class ClientPlayerEntityMixin implements ClientPlayerAttackPrope
 
     @Override
     public int getComboStep() {
-        return dinamyc_combat$comboStep;
+        return 0;
     }
 
     @Override
     public int getComboTotal() {
-        return dinamyc_combat$comboTotal;
+        return 0;
     }
 
     @Override
     public void setComboState(int step, int total) {
-        dinamyc_combat$comboStep = step;
-        dinamyc_combat$comboTotal = total;
+    }
+
+    @Override
+    public void markClickAttack() {
+        dinamyc_combat$justClicked = true;
     }
 
     @Unique

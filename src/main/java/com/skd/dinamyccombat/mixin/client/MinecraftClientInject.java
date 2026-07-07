@@ -1,5 +1,6 @@
 package com.skd.dinamyccombat.mixin.client;
 
+import com.skd.dinamyccombat.config.ClientConfig;
 import com.skd.dinamyccombat.config.ServerConfig;
 import com.skd.dinamyccombat.logic.ClientPlayerAttackProperties;
 import com.skd.dinamyccombat.logic.WeaponRegistry;
@@ -12,8 +13,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
-import org.slf4j.Logger;
-import com.mojang.logging.LogUtils;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -24,8 +23,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Minecraft.class)
 public abstract class MinecraftClientInject {
-
-    private static final Logger LOGGER = LogUtils.getLogger();
 
     @Shadow
     public LocalPlayer player;
@@ -38,9 +35,6 @@ public abstract class MinecraftClientInject {
 
     @Shadow
     private int missTime;
-
-    @Unique
-    private boolean dinamyc_combat$attackKeyWasDown = false;
 
     @Inject(method = "startAttack", at = @At("HEAD"), cancellable = true)
     private void dinamyc_combat$onStartAttack(CallbackInfoReturnable<Boolean> cir) {
@@ -55,37 +49,37 @@ public abstract class MinecraftClientInject {
         if (attrs == null) attrs = WeaponRegistry.getAttributes(player.getOffhandItem());
         if (attrs == null) return;
 
-        if (player instanceof ClientPlayerAttackProperties cprops && cprops.isAnimationActive()) {
+        if (player instanceof ClientPlayerAttackProperties cprops) {
+            if (cprops.isAnimationActive()) {
+                missTime = 0;
+                cir.setReturnValue(false);
+                return;
+            }
+
+            cprops.setClientAttackKeyHeld(true);
+
+            int comboCount = cprops.incrementAndGetComboCount(player.tickCount);
+            cprops.setAnimationActive(true, player.tickCount + getAnimDuration(attrs, comboCount));
+            cprops.markClickAttack();
+
+            int cursorTarget = -1;
+            int[] entityIds = new int[0];
+            if (hitResult != null && hitResult.getType() == HitResult.Type.ENTITY) {
+                EntityHitResult entityHit = (EntityHitResult) hitResult;
+                Entity target = entityHit.getEntity();
+                if (target != null && !player.isPassengerOfSameVehicle(target)) {
+                    cursorTarget = target.getId();
+                    entityIds = new int[]{target.getId()};
+                }
+            }
+
+            var packet = new Packets.C2S_AttackRequest(comboCount, player.isShiftKeyDown(),
+                    ((PlayerInventoryAccessor) player.getInventory()).getSelected(), cursorTarget, entityIds);
+            ClientPacketDistributor.sendToServer(packet);
+            player.swing(InteractionHand.MAIN_HAND);
             missTime = 0;
             cir.setReturnValue(false);
-            return;
         }
-
-        int comboCount = 0;
-        if (player instanceof ClientPlayerAttackProperties cprops) {
-            comboCount = cprops.incrementAndGetComboCount(player.tickCount);
-            cprops.setAnimationActive(true, player.tickCount + getAnimDuration(attrs, comboCount));
-            cprops.setComboState((Math.abs(comboCount) % attrs.attacks().length) + 1, attrs.attacks().length);
-        }
-
-        int cursorTarget = -1;
-        int[] entityIds = new int[0];
-        if (hitResult != null && hitResult.getType() == HitResult.Type.ENTITY) {
-            EntityHitResult entityHit = (EntityHitResult) hitResult;
-            Entity target = entityHit.getEntity();
-            if (target != null && !player.isPassengerOfSameVehicle(target)) {
-                cursorTarget = target.getId();
-                entityIds = new int[]{target.getId()};
-            }
-        }
-
-        var packet = new Packets.C2S_AttackRequest(comboCount, player.isShiftKeyDown(),
-                ((PlayerInventoryAccessor) player.getInventory()).getSelected(), cursorTarget, entityIds);
-        ClientPacketDistributor.sendToServer(packet);
-
-        player.swing(InteractionHand.MAIN_HAND);
-        missTime = 0;
-        cir.setReturnValue(false);
     }
 
     @Unique
@@ -113,7 +107,6 @@ public abstract class MinecraftClientInject {
         if (player == null) return;
 
         boolean attackPressed = Minecraft.getInstance().options.keyAttack.isDown();
-        dinamyc_combat$attackKeyWasDown = attackPressed;
 
         if (player instanceof ClientPlayerAttackProperties cprops) {
             cprops.setClientAttackKeyHeld(attackPressed);

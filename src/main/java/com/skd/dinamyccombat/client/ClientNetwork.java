@@ -4,6 +4,9 @@ import com.skd.dinamyccombat.DinamyCombat;
 import com.skd.dinamyccombat.logic.AnimatedHand;
 import com.skd.dinamyccombat.logic.WeaponRegistry;
 import com.skd.dinamyccombat.network.Packets;
+import com.zigythebird.playeranim.accessors.IAnimatedAvatar;
+import com.zigythebird.playeranim.animation.PlayerAnimResources;
+import com.zigythebird.playeranim.animation.PlayerAnimationController;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -25,11 +28,31 @@ public class ClientNetwork {
         client.execute(() -> {
             if (client.level == null) return;
             var entity = client.level.getEntity(packet.playerId());
-            if (entity instanceof Player player && player != client.player) {
-                if (packet.animationName().equals("!STOP!")) {
-                    // stop animation
+            if (entity == null) return;
+
+            if (entity instanceof IAnimatedAvatar avatar) {
+                var manager = avatar.playerAnimLib$getAnimManager();
+                if (manager == null) return;
+
+                if (packet.animationName().equals("!STOP!") || packet.animationName().equals("stop")) {
+                    for (var pair : manager.getLayers()) {
+                        if (pair.second() instanceof PlayerAnimationController controller) {
+                            controller.stopTriggeredAnimation();
+                            break;
+                        }
+                    }
                 } else {
-                    // play animation on entity
+                    Identifier animId = Identifier.tryParse(packet.animationName());
+                    if (animId == null) return;
+                    var animation = PlayerAnimResources.getAnimation(animId);
+                    if (animation == null) return;
+
+                    for (var pair : manager.getLayers()) {
+                        if (pair.second() instanceof PlayerAnimationController controller) {
+                            controller.triggerAnimation(animation, packet.upswing());
+                            break;
+                        }
+                    }
                 }
             }
         });

@@ -3,6 +3,7 @@ package com.skd.dinamyccombat.network;
 import com.mojang.logging.LogUtils;
 import com.skd.dinamyccombat.DinamyCombat;
 import com.skd.dinamyccombat.api.WeaponAttributes;
+import com.skd.dinamyccombat.logic.AnimatedHand;
 import com.skd.dinamyccombat.logic.PlayerAttackHelper;
 import com.skd.dinamyccombat.logic.PlayerAttackProperties;
 import com.skd.dinamyccombat.utils.SoundHelper;
@@ -12,13 +13,10 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
-import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.ExperienceOrb;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.projectile.Projectile;
-import net.minecraft.network.chat.Component;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.slf4j.Logger;
 
@@ -31,10 +29,8 @@ public class ServerNetwork {
                 player.getId(), packet.animatedHand(), packet.animationName(),
                 packet.length(), packet.upswing(), packet.weaponRange(),
                 packet.upswingTicks(), packet.particles());
-        PacketDistributor.sendToPlayer(player, forwardPacket);
         for (var serverPlayer : world.players()) {
-            if (serverPlayer != player)
-                PacketDistributor.sendToPlayer(serverPlayer, forwardPacket);
+            PacketDistributor.sendToPlayer(serverPlayer, forwardPacket);
         }
     }
 
@@ -47,13 +43,27 @@ public class ServerNetwork {
         world.getServer().execute(() -> {
             ((PlayerAttackProperties) player).setComboCount(request.comboCount());
             PlayerAttackHelper.swapHandAttributes(player, hand.isOffHand(), () -> {
-                double damageMult = 0.0;
                 if (attributes != null && attack != null) {
-                    double comboMult = attack.damageMultiplier() - 1;
-                    damageMult += comboMult;
-                    var dualMult = PlayerAttackHelper.getDualWieldingAttackDamageMultiplier(player, hand) - 1;
-                    damageMult += dualMult;
                     SoundHelper.playSound(world, player, attack.swingSound());
+
+                    String animName = attack.animation();
+                    if (animName != null && !animName.isEmpty()) {
+                        var animHand = hand.isOffHand() ? AnimatedHand.OFF_HAND : AnimatedHand.MAIN_HAND;
+                        float length = 0.5F;
+                        float upswing = (float) attack.upswing();
+                        float weaponRange = 1.0F;
+                        if (attributes.attackRange() != 0) {
+                            weaponRange = (float) attributes.attackRange();
+                        } else {
+                            weaponRange = (float) (player.getAttributeValue(net.minecraft.world.entity.ai.attributes.Attributes.ENTITY_INTERACTION_RANGE) + attributes.rangeBonus());
+                        }
+                        var animPacket = new Packets.AttackAnimation(
+                                player.getId(), animHand, animName,
+                                length, upswing, weaponRange, 0, Packets.SwingParticles.EMPTY);
+                        for (var serverPlayer : world.players()) {
+                            PacketDistributor.sendToPlayer(serverPlayer, animPacket);
+                        }
+                    }
                 }
                 var lastAttackedTicks = ((LivingEntityAccessor) player).betterCombat_getTicksSinceLastAttack();
                 boolean attackedAny = false;
@@ -67,9 +77,6 @@ public class ServerNetwork {
                     attackedAny = true;
                 }
                 if (!attackedAny) player.resetAttackStrengthTicker();
-                if (damageMult != 0) {
-                    // damage already applied via vanilla attack
-                }
                 ((PlayerAttackProperties) player).setComboCount(-1);
             });
         });

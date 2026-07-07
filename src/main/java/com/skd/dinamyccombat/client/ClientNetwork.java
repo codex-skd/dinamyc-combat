@@ -2,12 +2,12 @@ package com.skd.dinamyccombat.client;
 
 import com.skd.dinamyccombat.DinamyCombat;
 import com.skd.dinamyccombat.config.ClientConfig;
-import com.skd.dinamyccombat.logic.AnimatedHand;
 import com.skd.dinamyccombat.logic.WeaponRegistry;
 import com.skd.dinamyccombat.network.Packets;
 import com.zigythebird.playeranim.accessors.IAnimatedAvatar;
 import com.zigythebird.playeranim.animation.PlayerAnimResources;
 import com.zigythebird.playeranim.animation.PlayerAnimationController;
+import com.zigythebird.playeranim.animation.layered.modifier.MirrorIfLeftHandModifier;
 import com.zigythebird.playeranimcore.api.firstPerson.FirstPersonConfiguration;
 import com.zigythebird.playeranimcore.api.firstPerson.FirstPersonMode;
 import net.minecraft.client.Minecraft;
@@ -15,9 +15,13 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundSource;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class ClientNetwork {
     private static final FirstPersonConfiguration FP_CONFIG =
             new FirstPersonConfiguration(true, true, true, true, true);
+    private static final Set<Integer> mirrorConfigured = new HashSet<>();
 
     public static void handleWeaponRegistrySync(Packets.WeaponRegistrySync packet) {
         WeaponRegistry.decodeRegistry(packet);
@@ -54,7 +58,7 @@ public class ClientNetwork {
                     for (var pair : manager.getLayers()) {
                         if (pair.second() instanceof PlayerAnimationController controller) {
                             if (entity == client.player) {
-                                setupFirstPerson(controller);
+                                setupLocalController(controller, packet.playerId());
                             }
                             controller.triggerAnimation(animation, (float) packet.upswing());
                             break;
@@ -65,7 +69,12 @@ public class ClientNetwork {
         });
     }
 
-    private static void setupFirstPerson(PlayerAnimationController controller) {
+    private static void setupLocalController(PlayerAnimationController controller, int playerId) {
+        if (!mirrorConfigured.contains(playerId)) {
+            controller.addModifierBefore(new MirrorIfLeftHandModifier());
+            mirrorConfigured.add(playerId);
+        }
+
         var configMode = ClientConfig.FIRST_PERSON_ANIMATIONS.get();
         switch (configMode) {
             case YES -> {

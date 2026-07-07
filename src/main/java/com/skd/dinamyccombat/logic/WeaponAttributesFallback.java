@@ -16,25 +16,29 @@ public class WeaponAttributesFallback {
     public static void initialize() {
         FALLBACK_CONFIG = FallbackConfig.createDefault();
         for (var itemId : BuiltInRegistries.ITEM.keySet()) {
-            var itemRef = BuiltInRegistries.ITEM.get(itemId);
-            if (itemRef.isEmpty()) continue;
-            Item item = itemRef.get().value();
-            if (PatternMatching.matches(itemId.toString(), FALLBACK_CONFIG.blacklist_item_id_regex)) continue;
-            FallbackConfig.CompatibilitySpecifier[] specifiers = null;
-            if (hasAttackDamage(item))
-                specifiers = FALLBACK_CONFIG.fallback_compatibility;
-            else if (item instanceof ProjectileWeaponItem)
-                specifiers = FALLBACK_CONFIG.ranged_weapons;
-            if (specifiers == null) continue;
-            for (var option : specifiers) {
-                if (WeaponRegistry.getAttributes(itemId) == null
-                        && PatternMatching.matches(itemId.toString(), option.item_id_regex)) {
-                    var container = WeaponRegistry.containers.get(Identifier.parse(option.weapon_attributes));
-                    if (container != null) {
-                        WeaponRegistry.resolveAndRegisterAttributes(itemId, container);
-                        break;
+            try {
+                var itemRef = BuiltInRegistries.ITEM.get(itemId);
+                if (itemRef.isEmpty()) continue;
+                Item item = itemRef.get().value();
+                if (PatternMatching.matches(itemId.toString(), FALLBACK_CONFIG.blacklist_item_id_regex)) continue;
+                FallbackConfig.CompatibilitySpecifier[] specifiers = null;
+                if (hasAttackDamage(item))
+                    specifiers = FALLBACK_CONFIG.fallback_compatibility;
+                else if (item instanceof ProjectileWeaponItem)
+                    specifiers = FALLBACK_CONFIG.ranged_weapons;
+                if (specifiers == null) continue;
+                for (var option : specifiers) {
+                    if (WeaponRegistry.getAttributes(itemId) == null
+                            && PatternMatching.matches(itemId.toString(), option.item_id_regex)) {
+                        var container = WeaponRegistry.containers.get(Identifier.parse(option.weapon_attributes));
+                        if (container != null) {
+                            WeaponRegistry.resolveAndRegisterAttributes(itemId, container);
+                            break;
+                        }
                     }
                 }
+            } catch (Exception e) {
+                WeaponRegistry.LOGGER.warn("Failed to process fallback for item {}: {}", itemId, e.getMessage());
             }
         }
     }

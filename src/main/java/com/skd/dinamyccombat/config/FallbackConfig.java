@@ -30,24 +30,24 @@ public class FallbackConfig {
         config.schema_version = 1;
 
         List<CompatibilitySpecifier> specifiers = new ArrayList<>();
-        specifiers.add(new CompatibilitySpecifier("bettercombat:.*", "{\"attributes\":{\"attack_range\":2.5,\"category\":\"axe\"}}"));
-        specifiers.add(new CompatibilitySpecifier("(?!minecraft:)(.*)_sword", "{\"attributes\":{\"attack_range\":2.5,\"category\":\"sword\"}}"));
-        specifiers.add(new CompatibilitySpecifier("(?!minecraft:)(.*)_axe", "{\"attributes\":{\"attack_range\":2.5,\"category\":\"axe\"}}"));
-        specifiers.add(new CompatibilitySpecifier("(?!minecraft:)(.*)_spear", "{\"attributes\":{\"attack_range\":3.0,\"pose\":\"two_handed\",\"category\":\"spear\"}}"));
-        specifiers.add(new CompatibilitySpecifier("(?!minecraft:)(.*)_dagger", "{\"attributes\":{\"attack_range\":1.8,\"category\":\"dagger\"}}"));
-        specifiers.add(new CompatibilitySpecifier("(?!minecraft:)(.*)_mace", "{\"attributes\":{\"attack_range\":2.5,\"category\":\"mace\"}}"));
-        specifiers.add(new CompatibilitySpecifier("(?!minecraft:)(.*)_hammer", "{\"attributes\":{\"attack_range\":2.5,\"category\":\"mace\"}}"));
-        specifiers.add(new CompatibilitySpecifier("(?!minecraft:)(.*)_halberd", "{\"attributes\":{\"attack_range\":3.5,\"category\":\"halberd\"}}"));
-        specifiers.add(new CompatibilitySpecifier("(?!minecraft:)(.*)_glaive", "{\"attributes\":{\"attack_range\":3.5,\"category\":\"glaive\"}}"));
-        specifiers.add(new CompatibilitySpecifier("(?!minecraft:)(.*)_scythe", "{\"attributes\":{\"attack_range\":3.0,\"category\":\"scythe\"}}"));
-        specifiers.add(new CompatibilitySpecifier("(?!minecraft:)(.*)_katana", "{\"attributes\":{\"attack_range\":2.8,\"category\":\"katana\"}}"));
-        specifiers.add(new CompatibilitySpecifier("(?!minecraft:)(.*)_claymore", "{\"attributes\":{\"attack_range\":3.2,\"category\":\"claymore\"}}"));
+        specifiers.add(new CompatibilitySpecifier("bettercombat:.*", "dinamyc_combat:sword"));
+        specifiers.add(new CompatibilitySpecifier("(?!minecraft:)(.*)_sword", "dinamyc_combat:sword"));
+        specifiers.add(new CompatibilitySpecifier("(?!minecraft:)(.*)_axe", "dinamyc_combat:axe"));
+        specifiers.add(new CompatibilitySpecifier("(?!minecraft:)(.*)_spear", "dinamyc_combat:spear"));
+        specifiers.add(new CompatibilitySpecifier("(?!minecraft:)(.*)_dagger", "dinamyc_combat:dagger"));
+        specifiers.add(new CompatibilitySpecifier("(?!minecraft:)(.*)_mace", "dinamyc_combat:mace"));
+        specifiers.add(new CompatibilitySpecifier("(?!minecraft:)(.*)_hammer", "dinamyc_combat:hammer"));
+        specifiers.add(new CompatibilitySpecifier("(?!minecraft:)(.*)_halberd", "dinamyc_combat:halberd"));
+        specifiers.add(new CompatibilitySpecifier("(?!minecraft:)(.*)_glaive", "dinamyc_combat:glaive"));
+        specifiers.add(new CompatibilitySpecifier("(?!minecraft:)(.*)_scythe", "dinamyc_combat:scythe"));
+        specifiers.add(new CompatibilitySpecifier("(?!minecraft:)(.*)_katana", "dinamyc_combat:katana"));
+        specifiers.add(new CompatibilitySpecifier("(?!minecraft:)(.*)_claymore", "dinamyc_combat:claymore"));
         config.fallback_compatibility = specifiers.toArray(new CompatibilitySpecifier[0]);
 
         List<CompatibilitySpecifier> ranged = new ArrayList<>();
-        ranged.add(new CompatibilitySpecifier("(?!minecraft:)(.*)_gun", "{\"attributes\":{\"attack_range\":-1}}"));
-        ranged.add(new CompatibilitySpecifier("(?!minecraft:)(.*)_staff", "{\"attributes\":{\"attack_range\":-1}}"));
-        ranged.add(new CompatibilitySpecifier("(?!minecraft:)(.*)_wand", "{\"attributes\":{\"attack_range\":-1}}"));
+        ranged.add(new CompatibilitySpecifier("(?!minecraft:)(.*)_gun", "dinamyc_combat:bow_two_handed_light"));
+        ranged.add(new CompatibilitySpecifier("(?!minecraft:)(.*)_staff", "dinamyc_combat:staff"));
+        ranged.add(new CompatibilitySpecifier("(?!minecraft:)(.*)_wand", "dinamyc_combat:staff"));
         config.ranged_weapons = ranged.toArray(new CompatibilitySpecifier[0]);
 
         return config;

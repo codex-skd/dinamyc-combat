@@ -23,7 +23,7 @@ public abstract class AbstractClientPlayerEntityMixin {
     @Unique
     private int dinamyc_combat$attackCooldownTicks = 0;
 
-    @Inject(method = "getFieldOfViewModifier", at = @At("HEAD"), cancellable = true)
+    @Inject(require = 0, method = "getFieldOfViewModifier", at = @At("HEAD"), cancellable = true)
     private void dinamyc_combat$getFovModifier(CallbackInfoReturnable<Float> cir) {
     }
 

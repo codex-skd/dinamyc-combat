@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(LevelRenderer.class)
 public abstract class EntityHitboxDebugRendererMixin {
 
-    @Inject(method = "renderHitbox", at = @At("TAIL"))
+    @Inject(require = 0, method = "renderHitbox", at = @At("TAIL"))
     private static void dinamyc_combat$renderWeaponOBB(PoseStack poseStack, MultiBufferSource buffers,
             Entity entity, float partialTicks, int color, CallbackInfo ci) {
     }

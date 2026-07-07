@@ -5,7 +5,6 @@
   "plugin": "com.skd.dinamyccombat.mixin.BetterCombatMixinPlugin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "DataComponentTypesMixin",
     "EnchantmentMixin",
     "ItemStackMixin",
     "RangedWeaponItemMixin",

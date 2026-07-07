@@ -35,7 +35,7 @@ public abstract class MinecraftClientInject {
     @Unique
     private boolean dinamyc_combat$attackKeyWasDown = false;
 
-    @Inject(method = "startAttack", at = @At("HEAD"), cancellable = true)
+    @Inject(require = 0, method = "startAttack", at = @At("HEAD"), cancellable = true)
     private void dinamyc_combat$onStartAttack(CallbackInfoReturnable<Boolean> cir) {
         if (player == null) {
             return;
@@ -62,7 +62,7 @@ public abstract class MinecraftClientInject {
         missTime = 0;
     }
 
-    @Inject(method = "tick", at = @At("HEAD"))
+    @Inject(require = 0, method = "tick", at = @At("HEAD"))
     private void dinamyc_combat$onTick(CallbackInfo ci) {
         if (player != null) {
             float cooldown = player.getAttackStrengthScale(0.5F);
@@ -72,7 +72,7 @@ public abstract class MinecraftClientInject {
         }
     }
 
-    @Inject(method = "continueAttack", at = @At("HEAD"))
+    @Inject(require = 0, method = "continueAttack", at = @At("HEAD"))
     private void dinamyc_combat$onContinueAttack(boolean bl, CallbackInfo ci) {
         if (player == null) {
             return;

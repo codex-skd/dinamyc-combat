@@ -15,7 +15,7 @@ import java.util.List;
 @Mixin(ItemStack.class)
 public abstract class ItemStackTooltipMixin {
 
-    @Inject(method = "getTooltipLines", at = @At("RETURN"))
+    @Inject(require = 0, method = "getTooltipLines", at = @At("RETURN"))
     private void dinamyc_combat$addAttackRangeTooltip(Item.TooltipContext context, Player player,
             TooltipFlag tooltipFlag, CallbackInfoReturnable<List<Component>> cir) {
         if (player != null) {

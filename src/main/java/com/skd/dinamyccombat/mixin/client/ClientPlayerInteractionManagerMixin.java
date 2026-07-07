@@ -23,21 +23,21 @@ public abstract class ClientPlayerInteractionManagerMixin {
     @Shadow
     private boolean isDestroying;
 
-    @Inject(method = "attack", at = @At("HEAD"))
+    @Inject(require = 0, method = "attack", at = @At("HEAD"))
     private void dinamyc_combat$onAttackEntity(Player player, Entity target, CallbackInfo ci) {
         if (minecraft.player != null && minecraft.player.isAlive()) {
         }
     }
 
-    @Inject(method = "startDestroyBlock", at = @At("HEAD"))
+    @Inject(require = 0, method = "startDestroyBlock", at = @At("HEAD"))
     private void dinamyc_combat$onStartDestroyBlock(CallbackInfoReturnable<Boolean> cir) {
     }
 
-    @Inject(method = "continueDestroyBlock", at = @At("HEAD"))
+    @Inject(require = 0, method = "continueDestroyBlock", at = @At("HEAD"))
     private void dinamyc_combat$onContinueDestroyBlock(CallbackInfoReturnable<Boolean> cir) {
     }
 
-    @Inject(method = "stopDestroyBlock", at = @At("HEAD"))
+    @Inject(require = 0, method = "stopDestroyBlock", at = @At("HEAD"))
     private void dinamyc_combat$onStopDestroyBlock(CallbackInfo ci) {
     }
 }

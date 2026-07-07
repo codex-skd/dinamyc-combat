@@ -17,11 +17,11 @@ public abstract class ClientPlayNetworkHandlerMixin {
     @Final
     private Minecraft minecraft;
 
-    @Inject(method = "send(Lnet/minecraft/network/protocol/Packet;)V", at = @At("HEAD"))
+    @Inject(require = 0, method = "send(Lnet/minecraft/network/protocol/Packet;)V", at = @At("HEAD"))
     private void dinamyc_combat$onSendPacket(Packet<?> packet, CallbackInfo ci) {
     }
 
-    @Inject(method = "handleBundleDelimiter", at = @At("HEAD"))
+    @Inject(require = 0, method = "handleBundleDelimiter", at = @At("HEAD"))
     private void dinamyc_combat$onBundleDelimiter(CallbackInfo ci) {
     }
 }

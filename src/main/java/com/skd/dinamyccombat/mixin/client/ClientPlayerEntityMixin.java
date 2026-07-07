@@ -29,7 +29,7 @@ public abstract class ClientPlayerEntityMixin {
     @Unique
     private boolean dinamyc_combat$isAttackKeyHeld = false;
 
-    @Inject(method = "attack", at = @At("HEAD"))
+    @Inject(require = 0, method = "attack", at = @At("HEAD"))
     private void dinamyc_combat$onClientAttack(Entity target, CallbackInfo ci) {
         LocalPlayer self = (LocalPlayer) (Object) this;
         int currentTime = self.tickCount;
@@ -42,7 +42,7 @@ public abstract class ClientPlayerEntityMixin {
         dinamyc_combat$clientComboTimeout = 40;
     }
 
-    @Inject(method = "tick", at = @At("HEAD"))
+    @Inject(require = 0, method = "tick", at = @At("HEAD"))
     private void dinamyc_combat$onClientTick(CallbackInfo ci) {
         LocalPlayer self = (LocalPlayer) (Object) this;
         if (dinamyc_combat$clientComboTimeout > 0) {

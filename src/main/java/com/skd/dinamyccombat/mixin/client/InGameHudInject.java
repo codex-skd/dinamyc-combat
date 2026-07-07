@@ -25,7 +25,7 @@ public abstract class InGameHudInject {
     @Shadow
     private int screenHeight;
 
-    @Inject(method = "render", at = @At("HEAD"))
+    @Inject(require = 0, method = "render", at = @At("HEAD"))
     private void dinamyc_combat$onRender(Object graphics, DeltaTracker deltaTracker, CallbackInfo ci) {
     }
 

@@ -1,6 +1,7 @@
 package com.skd.dinamyccombat.neoforge;
 
 import com.skd.dinamyccombat.DinamyCombat;
+import com.skd.dinamyccombat.api.component.BetterCombatDataComponents;
 import com.skd.dinamyccombat.config.ClientConfig;
 import com.skd.dinamyccombat.config.ServerConfig;
 import com.skd.dinamyccombat.neoforge.attachment.DinamyCombatPlayerAttachments;
@@ -33,6 +34,7 @@ public final class DinamyCombatNeoForge {
 
     public DinamyCombatNeoForge(IEventBus modEventBus, ModContainer modContainer) {
         DinamyCombat.init();
+        BetterCombatDataComponents.init(modEventBus);
         DinamyCombatPlayerAttachments.init(ATTACHMENT_TYPES);
         modEventBus.addListener(RegisterEvent.class, event -> {
             if (event.getRegistryKey() == Registries.PARTICLE_TYPE) {

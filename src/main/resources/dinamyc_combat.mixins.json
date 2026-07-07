@@ -19,6 +19,7 @@
   ],
   "client": [
     "client.AbstractClientPlayerEntityMixin",
+    "client.AvatarAnimManagerMixin",
     "client.ClientPlayerEntityMixin",
     "client.ClientPlayerInteractionManagerMixin",
     "client.EntityHitboxDebugRendererMixin",

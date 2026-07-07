@@ -1,15 +1,17 @@
 package com.skd.dinamyccombat.mixin.client;
 
-import com.mojang.authlib.GameProfile;
+import com.skd.dinamyccombat.config.ClientConfig;
 import com.skd.dinamyccombat.config.ServerConfig;
 import com.skd.dinamyccombat.logic.ClientPlayerAttackProperties;
+import com.skd.dinamyccombat.logic.WeaponRegistry;
+import com.skd.dinamyccombat.mixin.player.PlayerInventoryAccessor;
+import com.skd.dinamyccombat.network.Packets;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.EntityHitResult;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -31,7 +33,7 @@ public abstract class ClientPlayerEntityMixin implements ClientPlayerAttackPrope
     @Unique
     private boolean dinamyc_combat$isAttackKeyHeld = false;
 
-    @Inject(require = 0, method = "attack", at = @At("HEAD"))
+    @Inject(method = "attack", at = @At("HEAD"))
     private void dinamyc_combat$onClientAttack(Entity target, CallbackInfo ci) {
         LocalPlayer self = (LocalPlayer) (Object) this;
         int currentTime = self.tickCount;
@@ -44,7 +46,7 @@ public abstract class ClientPlayerEntityMixin implements ClientPlayerAttackPrope
         dinamyc_combat$clientComboTimeout = 40;
     }
 
-    @Inject(require = 0, method = "tick", at = @At("HEAD"))
+    @Inject(method = "tick", at = @At("HEAD"))
     private void dinamyc_combat$onClientTick(CallbackInfo ci) {
         LocalPlayer self = (LocalPlayer) (Object) this;
         if (dinamyc_combat$clientComboTimeout > 0) {
@@ -54,12 +56,22 @@ public abstract class ClientPlayerEntityMixin implements ClientPlayerAttackPrope
             }
         }
 
-        if (dinamyc_combat$isAttackKeyHeld) {
+        if (dinamyc_combat$isAttackKeyHeld && ClientConfig.IS_HOLD_TO_ATTACK_ENABLED.get()) {
             float cooldown = self.getAttackStrengthScale(0.5F);
             if (cooldown >= 0.9F) {
-                EntityHitResult hit = pickEntityTarget(self);
-                if (hit != null) {
-                    self.attack(hit.getEntity());
+                var mainStack = self.getMainHandItem();
+                var attributes = WeaponRegistry.getAttributes(mainStack);
+                if (attributes != null) {
+                    EntityHitResult hit = pickEntityTarget(self);
+                    if (hit != null && hit.getEntity() != null) {
+                        int comboCount = incrementAndGetComboCount(self.tickCount);
+                        Entity target = hit.getEntity();
+                        var packet = new Packets.C2S_AttackRequest(comboCount, self.isShiftKeyDown(),
+                                ((PlayerInventoryAccessor) self.getInventory()).getSelected(),
+                                target.getId(), new int[]{target.getId()});
+                        ClientPacketDistributor.sendToServer(packet);
+                        self.swing(InteractionHand.MAIN_HAND);
+                    }
                 }
             }
         }

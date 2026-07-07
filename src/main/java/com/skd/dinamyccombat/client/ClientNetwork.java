@@ -1,14 +1,14 @@
 package com.skd.dinamyccombat.client;
 
 import com.skd.dinamyccombat.DinamyCombat;
-import com.skd.dinamyccombat.logic.AnimatedHand;
+import com.skd.dinamyccombat.config.ClientConfig;
 import com.skd.dinamyccombat.logic.WeaponRegistry;
 import com.skd.dinamyccombat.network.Packets;
 import com.zigythebird.playeranim.accessors.IAnimatedAvatar;
 import com.zigythebird.playeranim.animation.PlayerAnimResources;
 import com.zigythebird.playeranim.animation.PlayerAnimationController;
+import com.zigythebird.playeranimcore.api.firstPerson.FirstPersonMode;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundSource;
@@ -49,13 +49,27 @@ public class ClientNetwork {
 
                     for (var pair : manager.getLayers()) {
                         if (pair.second() instanceof PlayerAnimationController controller) {
-                            controller.triggerAnimation(animation, packet.upswing());
+                            applyFirstPersonMode(controller);
+                            controller.triggerAnimation(animation, (float) packet.upswing());
                             break;
                         }
                     }
                 }
             }
         });
+    }
+
+    private static void applyFirstPersonMode(PlayerAnimationController controller) {
+        var configMode = ClientConfig.FIRST_PERSON_ANIMATIONS.get();
+        FirstPersonMode mode = switch (configMode) {
+            case YES -> FirstPersonMode.THIRD_PERSON_MODEL;
+            case NO -> FirstPersonMode.NONE;
+            case AUTO -> {
+                boolean showFirstPerson = ClientConfig.IS_SHOWING_ARMS_IN_FIRST_PERSON.get();
+                yield showFirstPerson ? FirstPersonMode.THIRD_PERSON_MODEL : FirstPersonMode.NONE;
+            }
+        };
+        controller.setFirstPersonMode(mode);
     }
 
     public static void handleAttackSound(Packets.AttackSound packet) {

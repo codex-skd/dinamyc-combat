@@ -1,10 +1,13 @@
 package com.skd.dinamyccombat.mixin.client;
 
+import com.skd.dinamyccombat.config.ClientConfig;
+import com.skd.dinamyccombat.logic.WeaponRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.phys.EntityHitResult;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -23,21 +26,34 @@ public abstract class ClientPlayerInteractionManagerMixin {
     @Shadow
     private boolean isDestroying;
 
-    @Inject(require = 0, method = "attack", at = @At("HEAD"))
+    @Inject(method = "attack", at = @At("HEAD"))
     private void dinamyc_combat$onAttackEntity(Player player, Entity target, CallbackInfo ci) {
-        if (minecraft.player != null && minecraft.player.isAlive()) {
+    }
+
+    @Inject(method = "startDestroyBlock", at = @At("HEAD"), cancellable = true)
+    private void dinamyc_combat$onStartDestroyBlock(BlockPos pos, Direction direction, CallbackInfoReturnable<Boolean> cir) {
+        if (shouldPreventMining()) {
+            cir.setReturnValue(false);
         }
     }
 
-    @Inject(require = 0, method = "startDestroyBlock", at = @At("HEAD"))
-    private void dinamyc_combat$onStartDestroyBlock(CallbackInfoReturnable<Boolean> cir) {
+    @Inject(method = "continueDestroyBlock", at = @At("HEAD"), cancellable = true)
+    private void dinamyc_combat$onContinueDestroyBlock(BlockPos pos, Direction direction, CallbackInfoReturnable<Boolean> cir) {
+        if (shouldPreventMining()) {
+            cir.setReturnValue(false);
+        }
     }
 
-    @Inject(require = 0, method = "continueDestroyBlock", at = @At("HEAD"))
-    private void dinamyc_combat$onContinueDestroyBlock(CallbackInfoReturnable<Boolean> cir) {
-    }
-
-    @Inject(require = 0, method = "stopDestroyBlock", at = @At("HEAD"))
+    @Inject(method = "stopDestroyBlock", at = @At("HEAD"))
     private void dinamyc_combat$onStopDestroyBlock(CallbackInfo ci) {
+    }
+
+    private boolean shouldPreventMining() {
+        if (ClientConfig.IS_MINING_WITH_WEAPONS_ENABLED.get()) {
+            return false;
+        }
+        if (minecraft.player == null) return false;
+        var attributes = WeaponRegistry.getAttributes(minecraft.player.getMainHandItem());
+        return attributes != null;
     }
 }

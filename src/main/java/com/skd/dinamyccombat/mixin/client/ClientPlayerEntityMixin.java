@@ -8,7 +8,6 @@ import com.skd.dinamyccombat.network.Packets;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.EntityHitResult;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import org.spongepowered.asm.mixin.Mixin;
@@ -48,16 +47,18 @@ public abstract class ClientPlayerEntityMixin implements ClientPlayerAttackPrope
                 var mainStack = self.getMainHandItem();
                 var attributes = WeaponRegistry.getAttributes(mainStack);
                 if (attributes != null) {
+                    int comboCount = incrementAndGetComboCount(self.tickCount);
+                    int cursorTarget = -1;
+                    int[] entityIds = new int[0];
                     EntityHitResult hit = pickEntityTarget(self);
                     if (hit != null && hit.getEntity() != null) {
-                        int comboCount = incrementAndGetComboCount(self.tickCount);
-                        Entity target = hit.getEntity();
-                        var packet = new Packets.C2S_AttackRequest(comboCount, self.isShiftKeyDown(),
-                                ((PlayerInventoryAccessor) self.getInventory()).getSelected(),
-                                target.getId(), new int[]{target.getId()});
-                        ClientPacketDistributor.sendToServer(packet);
-                        self.swing(InteractionHand.MAIN_HAND);
+                        cursorTarget = hit.getEntity().getId();
+                        entityIds = new int[]{cursorTarget};
                     }
+                    var packet = new Packets.C2S_AttackRequest(comboCount, self.isShiftKeyDown(),
+                            ((PlayerInventoryAccessor) self.getInventory()).getSelected(), cursorTarget, entityIds);
+                    ClientPacketDistributor.sendToServer(packet);
+                    self.swing(InteractionHand.MAIN_HAND);
                 }
             }
         }

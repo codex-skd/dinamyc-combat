@@ -1,10 +1,9 @@
 package com.skd.dinamyccombat.mixin.player;
 
 import com.skd.dinamyccombat.logic.InventoryUtil;
-import com.skd.dinamyccombat.logic.PlayerAttackHelper;
-import com.skd.dinamyccombat.logic.PlayerAttackProperties;
 import com.skd.dinamyccombat.logic.WeaponRegistry;
 import com.skd.dinamyccombat.logic.knockback.ConfigurableKnockback;
+import com.skd.dinamyccombat.mixin.player.PlayerInventoryAccessor;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -34,8 +33,11 @@ public class LivingEntityMixin implements ConfigurableKnockback {
 
     @Inject(method = "getItemBySlot", at = @At("HEAD"), cancellable = true, require = 0)
     public void dinamyc_combat$getEquippedStack(EquipmentSlot slot, CallbackInfoReturnable<ItemStack> cir) {
+        if (slot != EquipmentSlot.OFFHAND) return;
         if (((Object) this) instanceof Player player) {
-            var mainStack = player.getMainHandItem();
+            var inventory = player.getInventory();
+            var inventoryAccessor = (PlayerInventoryAccessor) inventory;
+            var mainStack = inventoryAccessor.getItems().get(inventoryAccessor.getSelected());
             var mainAttributes = WeaponRegistry.getAttributes(mainStack);
             boolean mainTwoHanded = mainAttributes != null && mainAttributes.isTwoHanded();
 
@@ -43,10 +45,8 @@ public class LivingEntityMixin implements ConfigurableKnockback {
             var offAttributes = WeaponRegistry.getAttributes(offStack);
             boolean offTwoHanded = offAttributes != null && offAttributes.isTwoHanded();
 
-            if (slot == EquipmentSlot.OFFHAND) {
-                if (mainTwoHanded || offTwoHanded) {
-                    cir.setReturnValue(ItemStack.EMPTY);
-                }
+            if (mainTwoHanded || offTwoHanded) {
+                cir.setReturnValue(ItemStack.EMPTY);
             }
         }
     }

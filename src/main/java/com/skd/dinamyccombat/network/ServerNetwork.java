@@ -48,6 +48,9 @@ public class ServerNetwork {
 
                     String animName = attack.animation();
                     if (animName != null && !animName.isEmpty()) {
+                        if (hand.isOffHand()) {
+                            animName = animName.replace("_right", "_left");
+                        }
                         var animHand = hand.isOffHand() ? AnimatedHand.OFF_HAND : AnimatedHand.MAIN_HAND;
                         float length = 0.5F;
                         float upswing = (float) attack.upswing();

@@ -2,6 +2,7 @@ package com.skd.dinamyccombat;
 
 import com.mojang.logging.LogUtils;
 import com.skd.dinamyccombat.logic.WeaponRegistry;
+import com.skd.dinamyccombat.logic.WeaponAttributesFallback;
 import com.skd.dinamyccombat.compat.CompatFeatures;
 import net.minecraft.server.MinecraftServer;
 import org.slf4j.Logger;
@@ -17,6 +18,7 @@ public class DinamyCombat {
 
     public static void loadWeaponAttributes(MinecraftServer server) {
         WeaponRegistry.loadAttributes(server.getResourceManager());
+        WeaponAttributesFallback.initialize();
         WeaponRegistry.encodeRegistry();
     }
 }

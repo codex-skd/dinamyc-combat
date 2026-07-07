@@ -3,6 +3,7 @@ package com.skd.dinamyccombat.mixin;
 import com.skd.dinamyccombat.api.WeaponAttributes;
 import com.skd.dinamyccombat.api.WeaponAttributesHelper;
 import com.skd.dinamyccombat.api.component.BetterCombatDataComponents;
+import com.skd.dinamyccombat.logic.WeaponRegistry;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponentType;
@@ -20,7 +21,7 @@ public abstract class ItemStackMixin {
 
     @Unique
     public WeaponAttributes dinamyc_combat$getWeaponAttributes() {
-        return WeaponAttributesHelper.decode((String) null);
+        return WeaponRegistry.getAttributes((ItemStack) (Object) this);
     }
 
     @Unique

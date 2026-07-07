@@ -17,7 +17,15 @@
     "player.PlayerInventoryAccessor"
   ],
   "client": [
-    "client.MinecraftClientAccessor"
+    "client.AbstractClientPlayerEntityMixin",
+    "client.ClientPlayerEntityMixin",
+    "client.ClientPlayerInteractionManagerMixin",
+    "client.ClientPlayNetworkHandlerMixin",
+    "client.EntityHitboxDebugRendererMixin",
+    "client.InGameHudInject",
+    "client.ItemStackTooltipMixin",
+    "client.MinecraftClientAccessor",
+    "client.MinecraftClientInject"
   ],
   "server": [],
   "injectors": {

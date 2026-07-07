@@ -1,14 +1,17 @@
 package com.skd.dinamyccombat.mixin.client;
 
 import com.skd.dinamyccombat.config.ServerConfig;
+import com.skd.dinamyccombat.logic.ClientPlayerAttackProperties;
+import com.skd.dinamyccombat.logic.WeaponRegistry;
+import com.skd.dinamyccombat.mixin.player.PlayerInventoryAccessor;
+import com.skd.dinamyccombat.network.Packets;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -52,14 +55,35 @@ public abstract class MinecraftClientInject {
             return;
         }
 
+        var mainStack = player.getMainHandItem();
+        var attributes = WeaponRegistry.getAttributes(mainStack);
+        if (attributes == null) {
+            return;
+        }
+
+        int comboCount = 0;
+        if (player instanceof ClientPlayerAttackProperties cprops) {
+            comboCount = cprops.incrementAndGetComboCount(player.tickCount);
+        }
+
+        int cursorTarget = -1;
+        int[] entityIds = new int[0];
         if (hitResult != null && hitResult.getType() == HitResult.Type.ENTITY) {
             EntityHitResult entityHit = (EntityHitResult) hitResult;
             Entity target = entityHit.getEntity();
             if (target != null && !player.isPassengerOfSameVehicle(target)) {
+                cursorTarget = target.getId();
+                entityIds = new int[]{target.getId()};
             }
         }
 
+        var packet = new Packets.C2S_AttackRequest(comboCount, player.isShiftKeyDown(),
+                ((PlayerInventoryAccessor) player.getInventory()).getSelected(), cursorTarget, entityIds);
+        ClientPacketDistributor.sendToServer(packet);
+
+        player.swing(InteractionHand.MAIN_HAND);
         missTime = 0;
+        cir.setReturnValue(false);
     }
 
     @Inject(require = 0, method = "tick", at = @At("HEAD"))
@@ -80,10 +104,9 @@ public abstract class MinecraftClientInject {
 
         boolean attackPressed = Minecraft.getInstance().options.keyAttack.isDown();
         dinamyc_combat$attackKeyWasDown = attackPressed;
-    }
 
-    @Unique
-    private static Minecraft getInstance() {
-        return Minecraft.getInstance();
+        if (player instanceof ClientPlayerAttackProperties cprops) {
+            cprops.setClientAttackKeyHeld(attackPressed);
+        }
     }
 }

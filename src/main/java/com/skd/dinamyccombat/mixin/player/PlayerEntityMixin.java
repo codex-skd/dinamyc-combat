@@ -1,6 +1,7 @@
 package com.skd.dinamyccombat.mixin.player;
 
 import com.skd.dinamyccombat.config.ServerConfig;
+import com.skd.dinamyccombat.logic.PlayerAttackProperties;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -15,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Player.class)
-public abstract class PlayerEntityMixin {
+public abstract class PlayerEntityMixin implements PlayerAttackProperties {
 
     @Unique
     private int dinamyc_combat$comboCount = 0;
@@ -60,9 +61,14 @@ public abstract class PlayerEntityMixin {
         }
     }
 
-    @Unique
-    public int dinamyc_combat$getComboCount() {
+    @Override
+    public int getComboCount() {
         return dinamyc_combat$comboCount;
+    }
+
+    @Override
+    public void setComboCount(int comboCount) {
+        this.dinamyc_combat$comboCount = comboCount;
     }
 
     @Unique

@@ -5,6 +5,7 @@ import com.skd.dinamyccombat.api.component.BetterCombatDataComponents;
 import com.skd.dinamyccombat.config.ClientConfig;
 import com.skd.dinamyccombat.config.ServerConfig;
 import com.skd.dinamyccombat.neoforge.attachment.DinamyCombatPlayerAttachments;
+import com.skd.dinamyccombat.client.ClientNetwork;
 import com.skd.dinamyccombat.network.Packets;
 import com.skd.dinamyccombat.network.ServerNetwork;
 import com.skd.dinamyccombat.utils.SoundHelper;
@@ -63,10 +64,14 @@ public final class DinamyCombatNeoForge {
                         ServerPlayer player = (ServerPlayer) context.player();
                         ServerNetwork.handleBlockHit(packet, null, player);
                     });
-            registrar.playToClient(Packets.AttackAnimation.PACKET_ID, Packets.AttackAnimation.CODEC);
-            registrar.playToClient(Packets.AttackSound.PACKET_ID, Packets.AttackSound.CODEC);
-            registrar.playToClient(Packets.WeaponRegistrySync.PACKET_ID, Packets.WeaponRegistrySync.CODEC);
-            registrar.playToClient(Packets.ConfigSync.PACKET_ID, Packets.ConfigSync.CODEC);
+            registrar.playToClient(Packets.AttackAnimation.PACKET_ID, Packets.AttackAnimation.CODEC,
+                    (packet, context) -> ClientNetwork.handleAttackAnimation(packet));
+            registrar.playToClient(Packets.AttackSound.PACKET_ID, Packets.AttackSound.CODEC,
+                    (packet, context) -> ClientNetwork.handleAttackSound(packet));
+            registrar.playToClient(Packets.WeaponRegistrySync.PACKET_ID, Packets.WeaponRegistrySync.CODEC,
+                    (packet, context) -> ClientNetwork.handleWeaponRegistrySync(packet));
+            registrar.playToClient(Packets.ConfigSync.PACKET_ID, Packets.ConfigSync.CODEC,
+                    (packet, context) -> ClientNetwork.handleConfigSync(packet));
         });
     }
 }

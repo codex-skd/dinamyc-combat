@@ -2,6 +2,8 @@ package com.skd.dinamyccombat.mixin.client;
 
 import com.mojang.authlib.GameProfile;
 import com.skd.dinamyccombat.config.ServerConfig;
+import com.skd.dinamyccombat.logic.ClientPlayerAttackProperties;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
@@ -15,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(LocalPlayer.class)
-public abstract class ClientPlayerEntityMixin {
+public abstract class ClientPlayerEntityMixin implements ClientPlayerAttackProperties {
 
     @Unique
     private int dinamyc_combat$clientComboCount = 0;
@@ -63,23 +65,45 @@ public abstract class ClientPlayerEntityMixin {
         }
     }
 
-    @Unique
-    public int dinamyc_combat$getClientComboCount() {
+    @Override
+    public int getClientComboCount() {
         return dinamyc_combat$clientComboCount;
     }
 
-    @Unique
-    public void dinamyc_combat$setAttackKeyHeld(boolean held) {
+    @Override
+    public void setClientComboCount(int count) {
+        dinamyc_combat$clientComboCount = count;
+    }
+
+    @Override
+    public int incrementAndGetComboCount(int tickCount) {
+        int currentTime = tickCount;
+        if (currentTime - dinamyc_combat$clientLastAttackTime < 40) {
+            dinamyc_combat$clientComboCount++;
+        } else {
+            dinamyc_combat$clientComboCount = 1;
+        }
+        dinamyc_combat$clientLastAttackTime = currentTime;
+        dinamyc_combat$clientComboTimeout = 40;
+        return dinamyc_combat$clientComboCount;
+    }
+
+    @Override
+    public boolean isClientAttackKeyHeld() {
+        return dinamyc_combat$isAttackKeyHeld;
+    }
+
+    @Override
+    public void setClientAttackKeyHeld(boolean held) {
         dinamyc_combat$isAttackKeyHeld = held;
     }
 
     @Unique
-    public boolean dinamyc_combat$isAttackKeyHeld() {
-        return dinamyc_combat$isAttackKeyHeld;
-    }
-
-    @Unique
     private static EntityHitResult pickEntityTarget(LocalPlayer player) {
+        var hit = Minecraft.getInstance().hitResult;
+        if (hit != null && hit.getType() == net.minecraft.world.phys.HitResult.Type.ENTITY) {
+            return (EntityHitResult) hit;
+        }
         return null;
     }
 }

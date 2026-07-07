@@ -20,7 +20,6 @@
     "client.AbstractClientPlayerEntityMixin",
     "client.ClientPlayerEntityMixin",
     "client.ClientPlayerInteractionManagerMixin",
-    "client.ClientPlayNetworkHandlerMixin",
     "client.EntityHitboxDebugRendererMixin",
     "client.ItemStackTooltipMixin",
     "client.MinecraftClientAccessor",

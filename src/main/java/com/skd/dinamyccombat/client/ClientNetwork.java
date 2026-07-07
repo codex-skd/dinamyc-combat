@@ -1,17 +1,24 @@
 package com.skd.dinamyccombat.client;
 
 import com.skd.dinamyccombat.DinamyCombat;
+import com.skd.dinamyccombat.config.ClientConfig;
 import com.skd.dinamyccombat.logic.WeaponRegistry;
 import com.skd.dinamyccombat.network.Packets;
 import com.zigythebird.playeranim.accessors.IAnimatedAvatar;
 import com.zigythebird.playeranim.animation.PlayerAnimResources;
 import com.zigythebird.playeranim.animation.PlayerAnimationController;
+import com.zigythebird.playeranimcore.api.firstPerson.FirstPersonMode;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundSource;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class ClientNetwork {
+    private static final Set<Integer> firstPersonConfigured = new HashSet<>();
+
     public static void handleWeaponRegistrySync(Packets.WeaponRegistrySync packet) {
         WeaponRegistry.decodeRegistry(packet);
     }
@@ -46,6 +53,10 @@ public class ClientNetwork {
 
                     for (var pair : manager.getLayers()) {
                         if (pair.second() instanceof PlayerAnimationController controller) {
+                            if (!firstPersonConfigured.contains(packet.playerId()) && entity == client.player) {
+                                setupFirstPersonMode(controller);
+                                firstPersonConfigured.add(packet.playerId());
+                            }
                             controller.triggerAnimation(animation, (float) packet.upswing());
                             break;
                         }
@@ -53,6 +64,19 @@ public class ClientNetwork {
                 }
             }
         });
+    }
+
+    private static void setupFirstPersonMode(PlayerAnimationController controller) {
+        var configMode = ClientConfig.FIRST_PERSON_ANIMATIONS.get();
+        FirstPersonMode mode = switch (configMode) {
+            case YES -> FirstPersonMode.THIRD_PERSON_MODEL;
+            case NO -> FirstPersonMode.VANILLA;
+            case AUTO -> ClientConfig.IS_SHOWING_ARMS_IN_FIRST_PERSON.get()
+                    ? FirstPersonMode.THIRD_PERSON_MODEL : FirstPersonMode.VANILLA;
+        };
+        controller.setFirstPersonMode(mode);
+        controller.setFirstPersonConfiguration(
+                new com.zigythebird.playeranimcore.api.firstPerson.FirstPersonConfiguration(true, true, true, true, true));
     }
 
     public static void handleAttackSound(Packets.AttackSound packet) {

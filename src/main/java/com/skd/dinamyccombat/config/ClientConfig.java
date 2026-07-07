@@ -12,7 +12,7 @@ public class ClientConfig {
 
     public static final ModConfigSpec.BooleanValue IS_MINING_WITH_WEAPONS_ENABLED = BUILDER
             .comment("Allow mining blocks with weapons")
-            .define("isMiningWithWeaponsEnabled", true);
+            .define("isMiningWithWeaponsEnabled", false);
 
     public static final ModConfigSpec.BooleanValue IS_SWING_THRU_GRASS_ENABLED = BUILDER
             .comment("Allow attacking through grass, flowers, and other non-solid plants")
@@ -20,7 +20,7 @@ public class ClientConfig {
 
     public static final ModConfigSpec.BooleanValue IS_SWING_THRU_GRASS_SMART = BUILDER
             .comment("Only swing through grass when targeting an entity behind it")
-            .define("isSwingThruGrassSmart", false);
+            .define("isSwingThruGrassSmart", true);
 
     public static final ModConfigSpec.BooleanValue IS_ATTACK_INSTEAD_OF_MINE_WHEN_ENEMIES_CLOSE_ENABLED = BUILDER
             .comment("When enemies are close, attacking will target them instead of mining blocks")

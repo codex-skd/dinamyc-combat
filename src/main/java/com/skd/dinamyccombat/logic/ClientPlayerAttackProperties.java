@@ -8,4 +8,7 @@ public interface ClientPlayerAttackProperties {
     void setClientAttackKeyHeld(boolean held);
     boolean isAnimationActive();
     void setAnimationActive(boolean active, int endTick);
+    int getComboStep();
+    int getComboTotal();
+    void setComboState(int step, int total);
 }

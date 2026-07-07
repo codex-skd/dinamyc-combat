@@ -44,26 +44,16 @@ public abstract class MinecraftClientInject {
 
     @Inject(method = "startAttack", at = @At("HEAD"), cancellable = true)
     private void dinamyc_combat$onStartAttack(CallbackInfoReturnable<Boolean> cir) {
-        if (player == null) {
-            return;
-        }
-        if (!ServerConfig.ALLOW_FAST_ATTACKS.get()) {
-            return;
-        }
-        if (rightClickDelay > 0) {
-            return;
-        }
+        if (player == null) return;
+        if (!ServerConfig.ALLOW_FAST_ATTACKS.get()) return;
+        if (rightClickDelay > 0) return;
 
         float cooldown = player.getAttackStrengthScale(0.5F);
-        if (cooldown < 0.9F) {
-            return;
-        }
+        if (cooldown < 0.9F) return;
 
-        var mainStack = player.getMainHandItem();
-        var attributes = WeaponRegistry.getAttributes(mainStack);
-        if (attributes == null) {
-            return;
-        }
+        var attrs = WeaponRegistry.getAttributes(player.getMainHandItem());
+        if (attrs == null) attrs = WeaponRegistry.getAttributes(player.getOffhandItem());
+        if (attrs == null) return;
 
         if (player instanceof ClientPlayerAttackProperties cprops && cprops.isAnimationActive()) {
             missTime = 0;
@@ -71,12 +61,11 @@ public abstract class MinecraftClientInject {
             return;
         }
 
-        LOGGER.debug("Intercepting attack with weapon: {}", mainStack);
-
         int comboCount = 0;
         if (player instanceof ClientPlayerAttackProperties cprops) {
             comboCount = cprops.incrementAndGetComboCount(player.tickCount);
-            cprops.setAnimationActive(true, getAnimDuration(attributes, comboCount, player.tickCount));
+            cprops.setAnimationActive(true, player.tickCount + getAnimDuration(attrs, comboCount));
+            cprops.setComboState((Math.abs(comboCount) % attrs.attacks().length) + 1, attrs.attacks().length);
         }
 
         int cursorTarget = -1;
@@ -94,22 +83,19 @@ public abstract class MinecraftClientInject {
                 ((PlayerInventoryAccessor) player.getInventory()).getSelected(), cursorTarget, entityIds);
         ClientPacketDistributor.sendToServer(packet);
 
-        LOGGER.debug("Sent C2S_AttackRequest: combo={}, targets={}", comboCount, entityIds.length);
-
         player.swing(InteractionHand.MAIN_HAND);
         missTime = 0;
         cir.setReturnValue(false);
     }
 
     @Unique
-    private static int getAnimDuration(com.skd.dinamyccombat.api.WeaponAttributes attributes, int comboCount, int tickCount) {
+    private static int getAnimDuration(com.skd.dinamyccombat.api.WeaponAttributes attributes, int comboCount) {
         var attacks = attributes.attacks();
         if (attacks != null && attacks.length > 0) {
             int index = Math.abs(comboCount) % attacks.length;
-            double upswing = attacks[index].upswing();
-            return tickCount + (int)((0.3 + upswing) * 20);
+            return (int)((0.3 + attacks[index].upswing()) * 20);
         }
-        return tickCount + 10;
+        return 10;
     }
 
     @Inject(method = "tick", at = @At("HEAD"))
@@ -124,9 +110,7 @@ public abstract class MinecraftClientInject {
 
     @Inject(method = "continueAttack", at = @At("HEAD"))
     private void dinamyc_combat$onContinueAttack(boolean bl, CallbackInfo ci) {
-        if (player == null) {
-            return;
-        }
+        if (player == null) return;
 
         boolean attackPressed = Minecraft.getInstance().options.keyAttack.isDown();
         dinamyc_combat$attackKeyWasDown = attackPressed;

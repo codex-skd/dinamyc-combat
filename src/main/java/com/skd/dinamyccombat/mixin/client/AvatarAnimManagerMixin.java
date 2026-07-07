@@ -1,13 +1,13 @@
 package com.skd.dinamyccombat.mixin.client;
 
-import com.zigythebird.playeranim.animation.AvatarAnimManager;
+import com.zigythebird.playeranimcore.animation.layered.AnimationStack;
 import com.zigythebird.playeranimcore.api.firstPerson.FirstPersonConfiguration;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(AvatarAnimManager.class)
+@Mixin(AnimationStack.class)
 public abstract class AvatarAnimManagerMixin {
 
     @Inject(method = "getFirstPersonConfiguration", at = @At("RETURN"), cancellable = true)

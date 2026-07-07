@@ -55,16 +55,13 @@ public class ServerNetwork {
                     damageMult += dualMult;
                     SoundHelper.playSound(world, player, attack.swingSound());
                 }
-                var lastAttackedTicks = ((LivingEntityAccessor) player).getAttackStrengthTicker();
+                var lastAttackedTicks = ((LivingEntityAccessor) player).betterCombat_getTicksSinceLastAttack();
                 boolean attackedAny = false;
                 for (int entityId : request.entityIds()) {
                     var entity = world.getEntity(entityId);
                     if (entity == null || entity == player.getVehicle()) continue;
                     if (entity instanceof ArmorStand armorStand && armorStand.isMarker()) continue;
-                    if (entity instanceof LivingEntity living) {
-                        living.invulnerableTime = 0;
-                    }
-                    ((LivingEntityAccessor) player).setAttackStrengthTicker((int) lastAttackedTicks);
+                    ((LivingEntityAccessor) player).betterCombat_setTicksSinceLastAttack((int) lastAttackedTicks);
                     if (entity instanceof ItemEntity || entity instanceof ExperienceOrb || entity instanceof Projectile || entity == player) continue;
                     player.attack(entity);
                     attackedAny = true;

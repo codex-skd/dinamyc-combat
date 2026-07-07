@@ -22,7 +22,7 @@ public abstract class ServerPlayNetworkHandlerMixin {
             require = 0)
     public ItemStack dinamyc_combat$getStackInHand(ServerPlayer instance, InteractionHand hand) {
         return switch (hand) {
-            case MAIN_HAND -> instance.getMainHandItem();
+            case MAIN_HAND -> ((PlayerEntityAccessor) instance).getInventory().getSelected();
             case OFF_HAND -> InventoryUtil.getOffHandSlotStack(instance);
         };
     }

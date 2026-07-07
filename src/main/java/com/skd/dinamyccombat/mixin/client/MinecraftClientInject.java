@@ -65,11 +65,18 @@ public abstract class MinecraftClientInject {
             return;
         }
 
+        if (player instanceof ClientPlayerAttackProperties cprops && cprops.isAnimationActive()) {
+            missTime = 0;
+            cir.setReturnValue(false);
+            return;
+        }
+
         LOGGER.debug("Intercepting attack with weapon: {}", mainStack);
 
         int comboCount = 0;
         if (player instanceof ClientPlayerAttackProperties cprops) {
             comboCount = cprops.incrementAndGetComboCount(player.tickCount);
+            cprops.setAnimationActive(true, getAnimDuration(attributes, comboCount, player.tickCount));
         }
 
         int cursorTarget = -1;
@@ -92,6 +99,17 @@ public abstract class MinecraftClientInject {
         player.swing(InteractionHand.MAIN_HAND);
         missTime = 0;
         cir.setReturnValue(false);
+    }
+
+    @Unique
+    private static int getAnimDuration(com.skd.dinamyccombat.api.WeaponAttributes attributes, int comboCount, int tickCount) {
+        var attacks = attributes.attacks();
+        if (attacks != null && attacks.length > 0) {
+            int index = Math.abs(comboCount) % attacks.length;
+            double upswing = attacks[index].upswing();
+            return tickCount + (int)((0.3 + upswing) * 20);
+        }
+        return tickCount + 10;
     }
 
     @Inject(method = "tick", at = @At("HEAD"))

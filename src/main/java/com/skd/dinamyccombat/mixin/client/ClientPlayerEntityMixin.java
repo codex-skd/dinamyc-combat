@@ -31,6 +31,12 @@ public abstract class ClientPlayerEntityMixin implements ClientPlayerAttackPrope
     @Unique
     private boolean dinamyc_combat$isAttackKeyHeld = false;
 
+    @Unique
+    private boolean dinamyc_combat$animationActive = false;
+
+    @Unique
+    private int dinamyc_combat$animEndTick = 0;
+
     @Inject(method = "tick", at = @At("HEAD"))
     private void dinamyc_combat$onClientTick(CallbackInfo ci) {
         LocalPlayer self = (LocalPlayer) (Object) this;
@@ -41,9 +47,13 @@ public abstract class ClientPlayerEntityMixin implements ClientPlayerAttackPrope
             }
         }
 
+        if (dinamyc_combat$animationActive && self.tickCount >= dinamyc_combat$animEndTick) {
+            dinamyc_combat$animationActive = false;
+        }
+
         if (dinamyc_combat$isAttackKeyHeld && ClientConfig.IS_HOLD_TO_ATTACK_ENABLED.get()) {
             float cooldown = self.getAttackStrengthScale(0.5F);
-            if (cooldown >= 0.9F) {
+            if (cooldown >= 0.9F && !dinamyc_combat$animationActive) {
                 var mainStack = self.getMainHandItem();
                 var attributes = WeaponRegistry.getAttributes(mainStack);
                 if (attributes != null) {
@@ -59,9 +69,23 @@ public abstract class ClientPlayerEntityMixin implements ClientPlayerAttackPrope
                             ((PlayerInventoryAccessor) self.getInventory()).getSelected(), cursorTarget, entityIds);
                     ClientPacketDistributor.sendToServer(packet);
                     self.swing(InteractionHand.MAIN_HAND);
+
+                    float animDuration = getAnimDuration(attributes, comboCount);
+                    dinamyc_combat$animEndTick = self.tickCount + (int)(animDuration * 20);
+                    dinamyc_combat$animationActive = true;
                 }
             }
         }
+    }
+
+    @Unique
+    private static float getAnimDuration(com.skd.dinamyccombat.api.WeaponAttributes attributes, int comboCount) {
+        var attacks = attributes.attacks();
+        if (attacks != null && attacks.length > 0) {
+            int index = Math.abs(comboCount) % attacks.length;
+            return (float)(0.3 + attacks[index].upswing());
+        }
+        return 0.5F;
     }
 
     @Override
@@ -95,6 +119,17 @@ public abstract class ClientPlayerEntityMixin implements ClientPlayerAttackPrope
     @Override
     public void setClientAttackKeyHeld(boolean held) {
         dinamyc_combat$isAttackKeyHeld = held;
+    }
+
+    @Override
+    public boolean isAnimationActive() {
+        return dinamyc_combat$animationActive;
+    }
+
+    @Override
+    public void setAnimationActive(boolean active, int endTick) {
+        dinamyc_combat$animationActive = active;
+        dinamyc_combat$animEndTick = endTick;
     }
 
     @Unique

@@ -6,4 +6,6 @@ public interface ClientPlayerAttackProperties {
     int incrementAndGetComboCount(int tickCount);
     boolean isClientAttackKeyHeld();
     void setClientAttackKeyHeld(boolean held);
+    boolean isAnimationActive();
+    void setAnimationActive(boolean active, int endTick);
 }

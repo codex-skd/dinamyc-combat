@@ -4,22 +4,18 @@ import com.zigythebird.playeranim.accessors.IAvatarAnimationState;
 import com.zigythebird.playeranimcore.api.firstPerson.FirstPersonConfiguration;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(targets = "net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer")
+@Mixin(HumanoidArmorLayer.class)
 public abstract class ArmorBodyFixMixin {
 
-    @Inject(method = "renderArmorPiece", at = @At("TAIL"))
+    @Inject(method = "submit", at = @At("TAIL"))
     private void dinamyc_combat$restoreBodyArmor(CallbackInfo ci,
-                                                  HumanoidRenderState renderState,
-                                                  HumanoidModel<?> model,
-                                                  EquipmentSlot slot,
-                                                  ItemStack itemStack) {
+                                                  HumanoidRenderState renderState) {
         if (!(renderState instanceof IAvatarAnimationState state)) return;
         if (!state.playerAnimLib$isFirstPersonPass()) return;
 
@@ -28,6 +24,8 @@ public abstract class ArmorBodyFixMixin {
 
         FirstPersonConfiguration config = manager.getFirstPersonConfiguration();
         if (config != null && config.isShowArmor()) {
+            @SuppressWarnings("unchecked")
+            var model = (HumanoidModel<HumanoidRenderState>) ((HumanoidArmorLayer<?, ?, ?>) (Object) this).getParentModel();
             model.body.visible = true;
             model.leftLeg.visible = true;
             model.rightLeg.visible = true;

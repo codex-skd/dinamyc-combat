@@ -28,9 +28,9 @@ config="${mod_id}.mixins.json"
     side="BOTH"
 
 [[dependencies.${mod_id}]]
-    modId="player_animation_library"
+    modId="player_animation_core"
     type="required"
-    versionRange="[1.2,)"
+    versionRange="[0.0,)"
     ordering="AFTER"
     side="BOTH"
 

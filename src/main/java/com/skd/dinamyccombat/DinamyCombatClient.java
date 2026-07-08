@@ -1,5 +1,6 @@
 package com.skd.dinamyccombat;
 
+import com.skd.dinamyccombat.client.ClientNetwork;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
@@ -10,5 +11,6 @@ import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 public class DinamyCombatClient {
     public DinamyCombatClient(ModContainer container) {
         container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
+        ClientNetwork.init();
     }
 }

@@ -1,19 +1,38 @@
 package com.skd.dinamyccombat.client;
 
 import com.skd.dinamyccombat.DinamyCombat;
+import com.skd.dinamyccombat.config.ClientConfig;
 import com.skd.dinamyccombat.logic.AnimatedHand;
 import com.skd.dinamyccombat.logic.WeaponRegistry;
 import com.skd.dinamyccombat.network.Packets;
-import com.zigythebird.playeranim.accessors.IAnimatedAvatar;
-import com.zigythebird.playeranim.animation.PlayerAnimResources;
-import com.zigythebird.playeranim.animation.PlayerAnimationController;
-import com.zigythebird.playeranim.animation.layered.modifier.MirrorIfLeftHandModifier;
+import com.skd.playeranimationcore.animation.AnimationData;
+import com.skd.playeranimationcore.animation.AnimationController;
+import com.skd.playeranimationcore.animation.PlayerAnimResources;
+import com.skd.playeranimationcore.animation.PlayerAnimationController;
+import com.skd.playeranimationcore.animation.layered.modifier.MirrorIfLeftHandModifier;
+import com.skd.playeranimationcore.api.PlayerAnimationAccess;
+import com.skd.playeranimationcore.api.PlayerAnimationFactory;
+import com.skd.playeranimationcore.api.firstPerson.FirstPersonConfiguration;
+import com.skd.playeranimationcore.api.firstPerson.FirstPersonMode;
+import com.skd.playeranimationcore.enums.PlayState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.Avatar;
 
 public class ClientNetwork {
+
+    private static final Identifier FACTORY_ID = Identifier.fromNamespaceAndPath(DinamyCombat.MODID, "combat");
+    private static final FirstPersonConfiguration FP_CONFIG = new FirstPersonConfiguration()
+            .setShowRightArm(true).setShowLeftArm(true)
+            .setShowRightItem(true).setShowLeftItem(true)
+            .setShowArmor(true);
+
+    public static void init() {
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(
+                FACTORY_ID, 1000, CombatAnimationController::new);
+    }
 
     public static void handleWeaponRegistrySync(Packets.WeaponRegistrySync packet) {
         WeaponRegistry.decodeRegistry(packet);
@@ -28,39 +47,35 @@ public class ClientNetwork {
         client.execute(() -> {
             if (client.level == null) return;
             var entity = client.level.getEntity(packet.playerId());
-            if (entity == null) return;
+            if (!(entity instanceof Avatar avatar)) return;
 
-            if (entity instanceof IAnimatedAvatar avatar) {
-                var manager = avatar.playerAnimLib$getAnimManager();
-                if (manager == null) return;
+            var layer = PlayerAnimationAccess.getPlayerAnimationLayer(avatar, FACTORY_ID);
+            if (!(layer instanceof PlayerAnimationController controller)) return;
 
-                if (packet.animationName().equals("!STOP!") || packet.animationName().equals("stop")) {
-                    for (var pair : manager.getLayers()) {
-                        if (pair.second() instanceof PlayerAnimationController controller) {
-                            controller.stopTriggeredAnimation();
-                            break;
-                        }
-                    }
-                } else {
-                    Identifier animId = Identifier.tryParse(packet.animationName());
-                    if (animId == null) return;
-                    var animation = PlayerAnimResources.getAnimation(animId);
-                    if (animation == null) return;
+            Identifier animId = Identifier.tryParse(packet.animationName());
+            if (animId == null) return;
+            var animation = PlayerAnimResources.getAnimation(animId);
+            if (animation == null) return;
 
-                    for (var pair : manager.getLayers()) {
-                        if (pair.second() instanceof PlayerAnimationController controller) {
-                            MirrorIfLeftHandModifier mirrorMod = null;
-                            if (entity == client.player && packet.animatedHand() == AnimatedHand.OFF_HAND) {
-                                mirrorMod = new MirrorIfLeftHandModifier();
-                                controller.addModifierBefore(mirrorMod);
-                            }
-                            controller.triggerAnimation(animation, (float) packet.upswing());
-                            break;
-                        }
-                    }
+            if (entity == client.player) {
+                applyFirstPersonConfig(controller);
+                if (packet.animatedHand() == AnimatedHand.OFF_HAND) {
+                    controller.addModifierBefore(new MirrorIfLeftHandModifier());
                 }
             }
+
+            controller.triggerAnimation(animId);
         });
+    }
+
+    private static void applyFirstPersonConfig(PlayerAnimationController controller) {
+        if (controller instanceof CombatAnimationController cac) {
+            var configMode = ClientConfig.FIRST_PERSON_ANIMATIONS.get();
+            boolean enabled = configMode == com.skd.dinamyccombat.config.TriStateAuto.YES
+                    || (configMode == com.skd.dinamyccombat.config.TriStateAuto.AUTO
+                        && ClientConfig.IS_SHOWING_ARMS_IN_FIRST_PERSON.get());
+            cac.setFirstPersonEnabled(enabled);
+        }
     }
 
     public static void handleAttackSound(Packets.AttackSound packet) {
@@ -79,5 +94,34 @@ public class ClientNetwork {
                 e.printStackTrace();
             }
         });
+    }
+
+    public static class CombatAnimationController extends PlayerAnimationController {
+        private boolean firstPersonEnabled = false;
+
+        public CombatAnimationController(Avatar avatar) {
+            super(avatar, CombatAnimationController::handleState);
+        }
+
+        public void setFirstPersonEnabled(boolean enabled) {
+            this.firstPersonEnabled = enabled;
+        }
+
+        @Override
+        public FirstPersonMode getFirstPersonMode() {
+            return firstPersonEnabled ? FirstPersonMode.THIRD_PERSON_MODEL : FirstPersonMode.NONE;
+        }
+
+        @Override
+        public FirstPersonConfiguration getFirstPersonConfiguration() {
+            return FP_CONFIG;
+        }
+
+        private static PlayState handleState(
+                AnimationController controller,
+                AnimationData data,
+                AnimationSetter setter) {
+            return PlayState.CONTINUE;
+        }
     }
 }

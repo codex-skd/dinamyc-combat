@@ -19,7 +19,7 @@
   ],
   "client": [
     "client.AbstractClientPlayerEntityMixin",
-    "client.ArmorVisibilityFixMixin",
+    "client.ArmorBodyFixMixin",
     "client.AvatarAnimManagerMixin",
     "client.ClientPlayerEntityMixin",
     "client.ClientPlayerInteractionManagerMixin",

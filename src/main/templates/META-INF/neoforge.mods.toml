@@ -30,7 +30,7 @@ config="${mod_id}.mixins.json"
 [[dependencies.${mod_id}]]
     modId="player_animation_core"
     type="required"
-    versionRange="[0.0,)"
+    versionRange="[0,)"
     ordering="AFTER"
     side="BOTH"
 

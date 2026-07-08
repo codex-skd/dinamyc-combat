@@ -69,12 +69,16 @@ public class ClientNetwork {
     }
 
     private static void applyFirstPersonConfig(PlayerAnimationController controller) {
-        if (controller instanceof CombatAnimationController cac) {
-            var configMode = ClientConfig.FIRST_PERSON_ANIMATIONS.get();
-            boolean enabled = configMode == com.skd.dinamyccombat.config.TriStateAuto.YES
-                    || (configMode == com.skd.dinamyccombat.config.TriStateAuto.AUTO
-                        && ClientConfig.IS_SHOWING_ARMS_IN_FIRST_PERSON.get());
-            cac.setFirstPersonEnabled(enabled);
+        var configMode = ClientConfig.FIRST_PERSON_ANIMATIONS.get();
+        boolean enabled = configMode == com.skd.dinamyccombat.config.TriStateAuto.YES
+                || (configMode == com.skd.dinamyccombat.config.TriStateAuto.AUTO
+                    && ClientConfig.IS_SHOWING_ARMS_IN_FIRST_PERSON.get());
+
+        if (enabled) {
+            controller.setFirstPersonMode(FirstPersonMode.THIRD_PERSON_MODEL);
+            controller.setFirstPersonConfiguration(FP_CONFIG);
+        } else {
+            controller.setFirstPersonMode(FirstPersonMode.NONE);
         }
     }
 
@@ -97,24 +101,9 @@ public class ClientNetwork {
     }
 
     public static class CombatAnimationController extends PlayerAnimationController {
-        private boolean firstPersonEnabled = false;
 
         public CombatAnimationController(Avatar avatar) {
             super(avatar, CombatAnimationController::handleState);
-        }
-
-        public void setFirstPersonEnabled(boolean enabled) {
-            this.firstPersonEnabled = enabled;
-        }
-
-        @Override
-        public FirstPersonMode getFirstPersonMode() {
-            return firstPersonEnabled ? FirstPersonMode.THIRD_PERSON_MODEL : FirstPersonMode.NONE;
-        }
-
-        @Override
-        public FirstPersonConfiguration getFirstPersonConfiguration() {
-            return FP_CONFIG;
         }
 
         private static PlayState handleState(

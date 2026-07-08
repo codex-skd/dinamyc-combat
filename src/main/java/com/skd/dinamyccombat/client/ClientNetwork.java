@@ -9,6 +9,7 @@ import com.zigythebird.playeranim.accessors.IAnimatedAvatar;
 import com.zigythebird.playeranim.animation.PlayerAnimResources;
 import com.zigythebird.playeranim.animation.PlayerAnimationController;
 import com.zigythebird.playeranim.animation.layered.modifier.MirrorIfLeftHandModifier;
+import com.zigythebird.playeranimcore.api.firstPerson.FirstPersonConfiguration;
 import com.zigythebird.playeranimcore.api.firstPerson.FirstPersonMode;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -16,6 +17,9 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundSource;
 
 public class ClientNetwork {
+
+    private static final FirstPersonConfiguration FP_CONFIG =
+            new FirstPersonConfiguration(true, true, true, true, true);
 
     public static void handleWeaponRegistrySync(Packets.WeaponRegistrySync packet) {
         WeaponRegistry.decodeRegistry(packet);
@@ -77,7 +81,8 @@ public class ClientNetwork {
         if (configMode == com.skd.dinamyccombat.config.TriStateAuto.YES
                 || (configMode == com.skd.dinamyccombat.config.TriStateAuto.AUTO
                     && ClientConfig.IS_SHOWING_ARMS_IN_FIRST_PERSON.get())) {
-            controller.setFirstPersonMode(FirstPersonMode.VANILLA);
+            controller.setFirstPersonMode(FirstPersonMode.THIRD_PERSON_MODEL);
+            controller.setFirstPersonConfiguration(FP_CONFIG);
         }
     }
 

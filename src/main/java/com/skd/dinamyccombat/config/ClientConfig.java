@@ -92,5 +92,10 @@ public class ClientConfig {
                     "Lower values mean legs animate at slower speeds")
             .defineInRange("legAnimationThreshold", 0.5, 0.0, 5.0);
 
+    public static final ModConfigSpec.BooleanValue IS_AXE_CONSIDERED_WEAPON = BUILDER
+            .comment("Treat axes as weapons for combat animations",
+                    "When enabled, axes will use weapon attack animations like swords")
+            .define("isAxeConsideredWeapon", false);
+
     public static final ModConfigSpec SPEC = BUILDER.build();
 }

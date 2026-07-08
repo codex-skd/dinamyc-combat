@@ -63,8 +63,9 @@ public abstract class ClientPlayerEntityMixin implements ClientPlayerAttackPrope
             float cooldown = self.getAttackStrengthScale(0.5F);
             if (cooldown >= 0.9F && !dinamyc_combat$animationActive) {
                 var attrs = WeaponRegistry.getAttributes(self.getMainHandItem());
-                if (attrs == null) attrs = WeaponRegistry.getAttributes(self.getOffhandItem());
-                if (attrs != null) {
+                if (attrs != null
+                        && (ClientConfig.IS_AXE_CONSIDERED_WEAPON.get()
+                            || attrs.category() == null || !attrs.category().equals("axe"))) {
                     int comboCount = incrementAndGetComboCount(self.tickCount);
                     int cursorTarget = -1;
                     int[] entityIds = new int[0];

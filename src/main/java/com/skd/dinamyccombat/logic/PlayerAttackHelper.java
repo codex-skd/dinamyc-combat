@@ -64,16 +64,10 @@ public class PlayerAttackHelper {
         } else {
             var itemStack = player.getMainHandItem();
             var attributes = WeaponRegistry.getAttributes(itemStack);
-            boolean isOffHand = false;
-            if (attributes == null) {
-                itemStack = player.getOffhandItem();
-                attributes = WeaponRegistry.getAttributes(itemStack);
-                isOffHand = true;
-            }
             if (attributes != null && attributes.attacks() != null) {
-                var selection = selectAttack(comboCount, attributes, player, isOffHand);
+                var selection = selectAttack(comboCount, attributes, player, false);
                 if (selection == null) return null;
-                return new AttackHand(selection.attack, selection.combo, isOffHand, attributes, itemStack);
+                return new AttackHand(selection.attack, selection.combo, false, attributes, itemStack);
             }
         }
         return null;

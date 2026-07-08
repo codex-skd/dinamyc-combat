@@ -1,6 +1,7 @@
 package com.skd.dinamyccombat.mixin.client;
 
 import com.skd.dinamyccombat.config.ClientConfig;
+import com.skd.dinamyccombat.config.ClientConfig;
 import com.skd.dinamyccombat.config.ServerConfig;
 import com.skd.dinamyccombat.logic.ClientPlayerAttackProperties;
 import com.skd.dinamyccombat.logic.WeaponRegistry;
@@ -46,8 +47,9 @@ public abstract class MinecraftClientInject {
         if (cooldown < 0.9F) return;
 
         var attrs = WeaponRegistry.getAttributes(player.getMainHandItem());
-        if (attrs == null) attrs = WeaponRegistry.getAttributes(player.getOffhandItem());
         if (attrs == null) return;
+        if (!ClientConfig.IS_AXE_CONSIDERED_WEAPON.get() && attrs.category() != null
+                && attrs.category().equals("axe")) return;
 
         if (player instanceof ClientPlayerAttackProperties cprops) {
             if (cprops.isAnimationActive()) {

@@ -54,6 +54,12 @@ public abstract class ClientPlayerInteractionManagerMixin {
         }
         if (minecraft.player == null) return false;
         var attributes = WeaponRegistry.getAttributes(minecraft.player.getMainHandItem());
-        return attributes != null;
+        if (attributes == null) return false;
+        if (!ClientConfig.IS_AXE_CONSIDERED_WEAPON.get()
+                && attributes.category() != null
+                && attributes.category().equals("axe")) {
+            return false;
+        }
+        return true;
     }
 }

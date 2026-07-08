@@ -1,17 +1,22 @@
 package com.skd.dinamyccombat.client;
 
 import com.skd.dinamyccombat.DinamyCombat;
+import com.skd.dinamyccombat.config.ClientConfig;
+import com.skd.dinamyccombat.logic.AnimatedHand;
 import com.skd.dinamyccombat.logic.WeaponRegistry;
 import com.skd.dinamyccombat.network.Packets;
 import com.zigythebird.playeranim.accessors.IAnimatedAvatar;
 import com.zigythebird.playeranim.animation.PlayerAnimResources;
 import com.zigythebird.playeranim.animation.PlayerAnimationController;
+import com.zigythebird.playeranim.animation.layered.modifier.MirrorIfLeftHandModifier;
+import com.zigythebird.playeranimcore.api.firstPerson.FirstPersonMode;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundSource;
 
 public class ClientNetwork {
+
     public static void handleWeaponRegistrySync(Packets.WeaponRegistrySync packet) {
         WeaponRegistry.decodeRegistry(packet);
     }
@@ -46,6 +51,14 @@ public class ClientNetwork {
 
                     for (var pair : manager.getLayers()) {
                         if (pair.second() instanceof PlayerAnimationController controller) {
+                            MirrorIfLeftHandModifier mirrorMod = null;
+                            if (entity == client.player) {
+                                setupFirstPerson(controller);
+                                if (packet.animatedHand() == AnimatedHand.OFF_HAND) {
+                                    mirrorMod = new MirrorIfLeftHandModifier();
+                                    controller.addModifierBefore(mirrorMod);
+                                }
+                            }
                             controller.triggerAnimation(animation, (float) packet.upswing());
                             break;
                         }
@@ -53,6 +66,19 @@ public class ClientNetwork {
                 }
             }
         });
+    }
+
+    private static void setupFirstPerson(PlayerAnimationController controller) {
+        var configMode = ClientConfig.FIRST_PERSON_ANIMATIONS.get();
+        if (configMode == com.skd.dinamyccombat.config.TriStateAuto.NO) {
+            controller.setFirstPersonMode(FirstPersonMode.NONE);
+            return;
+        }
+        if (configMode == com.skd.dinamyccombat.config.TriStateAuto.YES
+                || (configMode == com.skd.dinamyccombat.config.TriStateAuto.AUTO
+                    && ClientConfig.IS_SHOWING_ARMS_IN_FIRST_PERSON.get())) {
+            controller.setFirstPersonMode(FirstPersonMode.VANILLA);
+        }
     }
 
     public static void handleAttackSound(Packets.AttackSound packet) {

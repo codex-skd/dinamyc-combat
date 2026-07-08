@@ -79,22 +79,12 @@ public abstract class ClientPlayerEntityMixin implements ClientPlayerAttackPrope
                     ClientPacketDistributor.sendToServer(packet);
                     self.swing(InteractionHand.MAIN_HAND);
 
-                    float animDuration = getAnimDuration(attrs, comboCount);
+                    float animDuration = self.getCurrentItemAttackStrengthDelay() / 20.0f + 0.15f;
                     dinamyc_combat$animEndTick = self.tickCount + (int)(animDuration * 20);
                     dinamyc_combat$animationActive = true;
                 }
             }
         }
-    }
-
-    @Unique
-    private static float getAnimDuration(com.skd.dinamyccombat.api.WeaponAttributes attributes, int comboCount) {
-        var attacks = attributes.attacks();
-        if (attacks != null && attacks.length > 0) {
-            int index = Math.abs(comboCount) % attacks.length;
-            return (float)(0.3 + attacks[index].upswing());
-        }
-        return 0.5F;
     }
 
     @Override

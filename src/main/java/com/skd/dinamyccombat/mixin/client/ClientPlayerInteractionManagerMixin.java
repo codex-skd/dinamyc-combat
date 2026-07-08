@@ -54,9 +54,6 @@ public abstract class ClientPlayerInteractionManagerMixin {
         }
         if (minecraft.player == null) return false;
         var attributes = WeaponRegistry.getAttributes(minecraft.player.getMainHandItem());
-        if (attributes == null) {
-            attributes = WeaponRegistry.getAttributes(minecraft.player.getOffhandItem());
-        }
         return attributes != null;
     }
 }

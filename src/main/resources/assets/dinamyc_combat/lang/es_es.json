@@ -118,5 +118,7 @@
   "dinamyc_combat.configuration.weapon_registry_logging": "Registro de armas",
   "dinamyc_combat.configuration.weapon_registry_logging.tooltip": "Registrar eventos de registro de armas en el log",
   "dinamyc_combat.configuration.weapon_registry_compression": "Compresion de registro de armas",
-  "dinamyc_combat.configuration.weapon_registry_compression.tooltip": "Comprimir paquetes de sincronizacion de registro de armas"
+  "dinamyc_combat.configuration.weapon_registry_compression.tooltip": "Comprimir paquetes de sincronizacion de registro de armas",
+  "dinamyc_combat.configuration.isAxeConsideredWeapon": "Tratar hachas como armas",
+  "dinamyc_combat.configuration.isAxeConsideredWeapon.tooltip": "Cuando esta activado, las hachas usan animaciones de combate como espadas"
 }

@@ -1,23 +1,17 @@
 package com.skd.dinamyccombat.client;
 
 import com.skd.dinamyccombat.DinamyCombat;
-import com.skd.dinamyccombat.config.ClientConfig;
 import com.skd.dinamyccombat.logic.WeaponRegistry;
 import com.skd.dinamyccombat.network.Packets;
 import com.zigythebird.playeranim.accessors.IAnimatedAvatar;
 import com.zigythebird.playeranim.animation.PlayerAnimResources;
 import com.zigythebird.playeranim.animation.PlayerAnimationController;
-import com.zigythebird.playeranimcore.api.firstPerson.FirstPersonConfiguration;
-import com.zigythebird.playeranimcore.api.firstPerson.FirstPersonMode;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundSource;
 
 public class ClientNetwork {
-    private static final FirstPersonConfiguration FP_CONFIG =
-            new FirstPersonConfiguration(true, true, true, true, true);
-
     public static void handleWeaponRegistrySync(Packets.WeaponRegistrySync packet) {
         WeaponRegistry.decodeRegistry(packet);
     }
@@ -52,9 +46,6 @@ public class ClientNetwork {
 
                     for (var pair : manager.getLayers()) {
                         if (pair.second() instanceof PlayerAnimationController controller) {
-                            if (entity == client.player) {
-                                setupFirstPerson(controller);
-                            }
                             controller.triggerAnimation(animation, (float) packet.upswing());
                             break;
                         }
@@ -62,23 +53,6 @@ public class ClientNetwork {
                 }
             }
         });
-    }
-
-    private static void setupFirstPerson(PlayerAnimationController controller) {
-        var configMode = ClientConfig.FIRST_PERSON_ANIMATIONS.get();
-        switch (configMode) {
-            case YES -> {
-                controller.setFirstPersonMode(FirstPersonMode.THIRD_PERSON_MODEL);
-                controller.setFirstPersonConfiguration(FP_CONFIG);
-            }
-            case NO -> controller.setFirstPersonMode(FirstPersonMode.NONE);
-            case AUTO -> {
-                if (ClientConfig.IS_SHOWING_ARMS_IN_FIRST_PERSON.get()) {
-                    controller.setFirstPersonMode(FirstPersonMode.THIRD_PERSON_MODEL);
-                    controller.setFirstPersonConfiguration(FP_CONFIG);
-                }
-            }
-        }
     }
 
     public static void handleAttackSound(Packets.AttackSound packet) {

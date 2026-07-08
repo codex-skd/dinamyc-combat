@@ -119,5 +119,7 @@
   "dinamyc_combat.configuration.weapon_registry_logging": "Weapon Registry Logging",
   "dinamyc_combat.configuration.weapon_registry_logging.tooltip": "Log weapon registry events",
   "dinamyc_combat.configuration.weapon_registry_compression": "Weapon Registry Compression",
-  "dinamyc_combat.configuration.weapon_registry_compression.tooltip": "Compress weapon registry sync packets"
+  "dinamyc_combat.configuration.weapon_registry_compression.tooltip": "Compress weapon registry sync packets",
+  "dinamyc_combat.configuration.isAxeConsideredWeapon": "Treat axes as weapons",
+  "dinamyc_combat.configuration.isAxeConsideredWeapon.tooltip": "When enabled, axes use combat animations like swords"
 }

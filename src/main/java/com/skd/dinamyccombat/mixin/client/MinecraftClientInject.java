@@ -61,7 +61,7 @@ public abstract class MinecraftClientInject {
             cprops.setClientAttackKeyHeld(true);
 
             int comboCount = cprops.incrementAndGetComboCount(player.tickCount);
-            cprops.setAnimationActive(true, player.tickCount + getAnimDuration(attrs, comboCount));
+            cprops.setAnimationActive(true, player.tickCount + getAnimDuration(player, attrs, comboCount));
             cprops.markClickAttack();
 
             int cursorTarget = -1;
@@ -85,13 +85,8 @@ public abstract class MinecraftClientInject {
     }
 
     @Unique
-    private static int getAnimDuration(com.skd.dinamyccombat.api.WeaponAttributes attributes, int comboCount) {
-        var attacks = attributes.attacks();
-        if (attacks != null && attacks.length > 0) {
-            int index = Math.abs(comboCount) % attacks.length;
-            return (int)((0.3 + attacks[index].upswing()) * 20);
-        }
-        return 10;
+    private static int getAnimDuration(LocalPlayer player, com.skd.dinamyccombat.api.WeaponAttributes attributes, int comboCount) {
+        return (int)(player.getCurrentItemAttackStrengthDelay() + 3);
     }
 
     @Inject(method = "tick", at = @At("HEAD"))

@@ -9,6 +9,33 @@
     "endTick": 2,
     "stopTick": 11,
     "degrees": false,
-    "moves": []
+    "moves": [
+      {
+        "tick": 1,
+        "easing": "EASEINOUTQUAD",
+        "turn": 0,
+        "right_item": {
+          "x": 4.510890505571297e-08,
+          "z": 2.5879178047180176,
+          "y": -3.4232497215270996,
+          "pitch": 3.1415927410125732,
+          "yaw": 0.0,
+          "roll": 0.0
+        }
+      },
+      {
+        "tick": 10,
+        "easing": "EASEINOUTQUAD",
+        "turn": 0,
+        "right_item": {
+          "x": 4.510890505571297e-08,
+          "z": 2.5879178047180176,
+          "y": -3.4232497215270996,
+          "pitch": 3.1415927410125732,
+          "yaw": 0.0,
+          "roll": 0.0
+        }
+      }
+    ]
   }
 }

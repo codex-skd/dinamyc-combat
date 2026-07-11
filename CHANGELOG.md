@@ -1,5 +1,11 @@
 # Dinamyc Combat - Changelog
 
+## v1.0.0-beta.66 (2026-07-11)
+- Updated PAC dependency to beta.19 (configurable armRotationScale via FirstPersonConfiguration)
+- Switched to FirstPersonMode.HANDS_ONLY_ARM with setArmRotationScale(1.0f) — PAC handles first-person natively
+- Removed custom FirstPersonItemRendererMixin (no longer needed, PAC does it)
+- All first-person animation logic delegated to PAC
+
 ## v1.0.0-beta.65 (2026-07-11)
 - Fixed third-person weapon positioning: restored right_item/left_item keyframes from original Better Combat data
 - Fixed first-person animation too weak: restored custom FirstPersonItemRendererMixin with SWING_SCALE=1.0f (full arm rotation)

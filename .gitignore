@@ -42,3 +42,6 @@ lib_ext/
 /libs/
 /run/
 /lib_ext/
+/com/
+/graphify-out/
+nul

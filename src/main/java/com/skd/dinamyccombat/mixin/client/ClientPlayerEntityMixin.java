@@ -1,13 +1,16 @@
 package com.skd.dinamyccombat.mixin.client;
 
+import com.skd.dinamyccombat.client.ClientNetwork;
 import com.skd.dinamyccombat.config.ClientConfig;
 import com.skd.dinamyccombat.logic.ClientPlayerAttackProperties;
+import com.skd.dinamyccombat.logic.PlayerAttackHelper;
 import com.skd.dinamyccombat.logic.WeaponRegistry;
 import com.skd.dinamyccombat.mixin.player.PlayerInventoryAccessor;
 import com.skd.dinamyccombat.network.Packets;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Avatar;
 import net.minecraft.world.phys.EntityHitResult;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import org.spongepowered.asm.mixin.Mixin;
@@ -32,12 +35,6 @@ public abstract class ClientPlayerEntityMixin implements ClientPlayerAttackPrope
     private boolean dinamyc_combat$isAttackKeyHeld = false;
 
     @Unique
-    private boolean dinamyc_combat$animationActive = false;
-
-    @Unique
-    private int dinamyc_combat$animEndTick = 0;
-
-    @Unique
     private boolean dinamyc_combat$justClicked = false;
 
     @Inject(method = "tick", at = @At("HEAD"))
@@ -50,10 +47,6 @@ public abstract class ClientPlayerEntityMixin implements ClientPlayerAttackPrope
             }
         }
 
-        if (dinamyc_combat$animationActive && self.tickCount >= dinamyc_combat$animEndTick) {
-            dinamyc_combat$animationActive = false;
-        }
-
         if (dinamyc_combat$justClicked) {
             dinamyc_combat$justClicked = false;
             return;
@@ -61,12 +54,16 @@ public abstract class ClientPlayerEntityMixin implements ClientPlayerAttackPrope
 
         if (dinamyc_combat$isAttackKeyHeld && ClientConfig.IS_HOLD_TO_ATTACK_ENABLED.get()) {
             float cooldown = self.getAttackStrengthScale(0.5F);
-            if (cooldown >= 0.9F && !dinamyc_combat$animationActive) {
-                var attrs = WeaponRegistry.getAttributes(self.getMainHandItem());
+            if (cooldown >= 0.9F && !ClientNetwork.isAttackAnimationPlaying((Avatar) self)) {
+                int comboCount = incrementAndGetComboCount(self.tickCount);
+
+                boolean isOffHand = PlayerAttackHelper.shouldAttackWithOffHand(self, comboCount);
+                var attackStack = isOffHand ? self.getOffhandItem() : self.getMainHandItem();
+                var attrs = WeaponRegistry.getAttributes(attackStack);
+
                 if (attrs != null
                         && (ClientConfig.IS_AXE_CONSIDERED_WEAPON.get()
                             || attrs.category() == null || !attrs.category().equals("axe"))) {
-                    int comboCount = incrementAndGetComboCount(self.tickCount);
                     int cursorTarget = -1;
                     int[] entityIds = new int[0];
                     EntityHitResult hit = pickEntityTarget(self);
@@ -77,11 +74,8 @@ public abstract class ClientPlayerEntityMixin implements ClientPlayerAttackPrope
                     var packet = new Packets.C2S_AttackRequest(comboCount, self.isShiftKeyDown(),
                             ((PlayerInventoryAccessor) self.getInventory()).getSelected(), cursorTarget, entityIds);
                     ClientPacketDistributor.sendToServer(packet);
-                    self.swing(InteractionHand.MAIN_HAND);
 
-                    float animDuration = self.getCurrentItemAttackStrengthDelay() / 20.0f + 0.15f;
-                    dinamyc_combat$animEndTick = self.tickCount + (int)(animDuration * 20);
-                    dinamyc_combat$animationActive = true;
+                    self.resetAttackStrengthTicker();
                 }
             }
         }
@@ -122,13 +116,12 @@ public abstract class ClientPlayerEntityMixin implements ClientPlayerAttackPrope
 
     @Override
     public boolean isAnimationActive() {
-        return dinamyc_combat$animationActive;
+        LocalPlayer self = (LocalPlayer) (Object) this;
+        return ClientNetwork.isAttackAnimationPlaying((Avatar) self);
     }
 
     @Override
     public void setAnimationActive(boolean active, int endTick) {
-        dinamyc_combat$animationActive = active;
-        dinamyc_combat$animEndTick = endTick;
     }
 
     @Override

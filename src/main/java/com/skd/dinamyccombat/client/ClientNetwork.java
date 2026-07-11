@@ -2,6 +2,7 @@ package com.skd.dinamyccombat.client;
 
 import com.skd.dinamyccombat.DinamyCombat;
 import com.skd.dinamyccombat.config.ClientConfig;
+import com.skd.dinamyccombat.config.TriStateAuto;
 import com.skd.dinamyccombat.logic.AnimatedHand;
 import com.skd.dinamyccombat.logic.WeaponRegistry;
 import com.skd.dinamyccombat.network.Packets;
@@ -9,6 +10,7 @@ import com.skd.playeranimationcore.animation.AnimationData;
 import com.skd.playeranimationcore.animation.AnimationController;
 import com.skd.playeranimationcore.animation.PlayerAnimResources;
 import com.skd.playeranimationcore.animation.PlayerAnimationController;
+import com.skd.playeranimationcore.animation.layered.IAnimation;
 import com.skd.playeranimationcore.animation.layered.modifier.MirrorIfLeftHandModifier;
 import com.skd.playeranimationcore.api.PlayerAnimationAccess;
 import com.skd.playeranimationcore.api.PlayerAnimationFactory;
@@ -23,10 +25,10 @@ import net.minecraft.world.entity.Avatar;
 
 public class ClientNetwork {
 
-    private static final Identifier FACTORY_ID = Identifier.fromNamespaceAndPath(DinamyCombat.MODID, "combat");
+    public static final Identifier FACTORY_ID = Identifier.fromNamespaceAndPath(DinamyCombat.MODID, "combat");
     private static final FirstPersonConfiguration FP_CONFIG = new FirstPersonConfiguration()
-            .setShowRightArm(true).setShowLeftArm(true)
-            .setShowRightItem(true).setShowLeftItem(true)
+            .setShowRightArm(false).setShowLeftArm(false)
+            .setShowRightItem(true).setShowLeftItem(false)
             .setShowArmor(true);
 
     public static void init() {
@@ -52,34 +54,15 @@ public class ClientNetwork {
             var layer = PlayerAnimationAccess.getPlayerAnimationLayer(avatar, FACTORY_ID);
             if (!(layer instanceof PlayerAnimationController controller)) return;
 
-            Identifier animId = Identifier.tryParse(packet.animationName());
-            if (animId == null) return;
-            var animation = PlayerAnimResources.getAnimation(animId);
-            if (animation == null) return;
-
-            if (entity == client.player) {
-                applyFirstPersonConfig(controller);
-                if (packet.animatedHand() == AnimatedHand.OFF_HAND) {
-                    controller.addModifierBefore(new MirrorIfLeftHandModifier());
-                }
+            if (entity == client.player && packet.animatedHand() == AnimatedHand.OFF_HAND) {
+                controller.addModifierBefore(new MirrorIfLeftHandModifier());
             }
 
-            controller.triggerAnimation(animId);
+            Identifier animId = Identifier.tryParse(packet.animationName());
+            if (animId != null && PlayerAnimResources.hasAnimation(animId)) {
+                controller.triggerAnimation(animId);
+            }
         });
-    }
-
-    private static void applyFirstPersonConfig(PlayerAnimationController controller) {
-        var configMode = ClientConfig.FIRST_PERSON_ANIMATIONS.get();
-        boolean enabled = configMode == com.skd.dinamyccombat.config.TriStateAuto.YES
-                || (configMode == com.skd.dinamyccombat.config.TriStateAuto.AUTO
-                    && ClientConfig.IS_SHOWING_ARMS_IN_FIRST_PERSON.get());
-
-        if (enabled) {
-            controller.setFirstPersonMode(FirstPersonMode.THIRD_PERSON_MODEL);
-            controller.setFirstPersonConfiguration(FP_CONFIG);
-        } else {
-            controller.setFirstPersonMode(FirstPersonMode.NONE);
-        }
     }
 
     public static void handleAttackSound(Packets.AttackSound packet) {
@@ -104,6 +87,7 @@ public class ClientNetwork {
 
         public CombatAnimationController(Avatar avatar) {
             super(avatar, CombatAnimationController::handleState);
+            applyFirstPersonConfig(this);
         }
 
         private static PlayState handleState(
@@ -111,6 +95,49 @@ public class ClientNetwork {
                 AnimationData data,
                 AnimationSetter setter) {
             return PlayState.CONTINUE;
+        }
+
+        @Override
+        public FirstPersonMode getFirstPersonMode() {
+            FirstPersonMode hardSet = super.getFirstPersonMode();
+            if (hardSet != FirstPersonMode.NONE) return hardSet;
+
+            var configMode = ClientConfig.FIRST_PERSON_ANIMATIONS.get();
+            boolean enabled = configMode == TriStateAuto.YES
+                    || (configMode == TriStateAuto.AUTO
+                        && ClientConfig.IS_SHOWING_ARMS_IN_FIRST_PERSON.get());
+            return enabled ? FirstPersonMode.HANDS_ONLY_ARM : FirstPersonMode.NONE;
+        }
+
+        @Override
+        public FirstPersonConfiguration getFirstPersonConfiguration() {
+            FirstPersonConfiguration hardSet = super.getFirstPersonConfiguration();
+            if (hardSet != IAnimation.DEFAULT_FIRST_PERSON_CONFIG) return hardSet;
+            return FP_CONFIG;
+        }
+    }
+
+    public static boolean isFirstPersonEnabled() {
+        var configMode = ClientConfig.FIRST_PERSON_ANIMATIONS.get();
+        return configMode == TriStateAuto.YES
+                || (configMode == TriStateAuto.AUTO
+                    && ClientConfig.IS_SHOWING_ARMS_IN_FIRST_PERSON.get());
+    }
+
+    public static boolean isAttackAnimationPlaying(Avatar avatar) {
+        var layer = PlayerAnimationAccess.getPlayerAnimationLayer(avatar, FACTORY_ID);
+        if (layer instanceof PlayerAnimationController controller) {
+            return !controller.hasAnimationFinished();
+        }
+        return false;
+    }
+
+    private static void applyFirstPersonConfig(PlayerAnimationController controller) {
+        if (isFirstPersonEnabled()) {
+            controller.setFirstPersonMode(FirstPersonMode.HANDS_ONLY_ARM);
+            controller.setFirstPersonConfiguration(FP_CONFIG);
+        } else {
+            controller.setFirstPersonMode(FirstPersonMode.NONE);
         }
     }
 }

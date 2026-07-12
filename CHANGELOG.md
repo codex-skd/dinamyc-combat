@@ -1,5 +1,10 @@
 # Dinamyc Combat - Changelog
 
+## v1.0.0-beta.67 (2026-07-11)
+- Switched from HANDS_ONLY_ARM to HANDS_ONLY mode — PAC now applies right_item transforms (position + rotation) instead of right_arm rotation alone
+- First-person item now moves through space like the hand in third person (positional translation + rotation)
+- Removed armRotationScale config (not used by HANDS_ONLY mode)
+
 ## v1.0.0-beta.66 (2026-07-11)
 - Updated PAC dependency to beta.19 (configurable armRotationScale via FirstPersonConfiguration)
 - Switched to FirstPersonMode.HANDS_ONLY_ARM with setArmRotationScale(1.0f) — PAC handles first-person natively

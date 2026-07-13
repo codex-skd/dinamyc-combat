@@ -1,5 +1,10 @@
 # Dinamyc Combat - Changelog
 
+## v1.0.0-beta.68 (2026-07-12)
+- Switched to THIRD_PERSON_MODEL — full player model renders in first person
+- Right arm, right item, and armor visible in first person (left arm/item hidden)
+- First-person arm swing now matches third-person animation exactly
+
 ## v1.0.0-beta.67 (2026-07-11)
 - Switched from HANDS_ONLY_ARM to HANDS_ONLY mode — PAC now applies right_item transforms (position + rotation) instead of right_arm rotation alone
 - First-person item now moves through space like the hand in third person (positional translation + rotation)

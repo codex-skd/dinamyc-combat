@@ -1,5 +1,11 @@
 # Dinamyc Combat - Changelog
 
+## v1.0.0-beta.70 (2026-07-13)
+- Switched to HANDS_ONLY_ARM with setArmRotationScale(1.0f) — PAC applies arm rotation directly to item (no position offset)
+- Restored original Better Combat right_item deltas for third-person use only
+- First person: item rotates with the arm at the hand pivot (like Better Combat), no position displacement
+- PAC beta.19's configurable armRotationScale allows tuning the rotation intensity
+
 ## v1.0.0-beta.69 (2026-07-12)
 - Back to HANDS_ONLY mode with generated right_item keyframes from arm rotation data
 - right_item now has position values derived from arm yaw/pitch/roll (hand arc motion)

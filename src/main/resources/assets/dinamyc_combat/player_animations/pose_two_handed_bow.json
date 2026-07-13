@@ -11,32 +11,6 @@
     "degrees": false,
     "moves": [
       {
-        "tick": 0,
-        "easing": "EASEINOUTQUAD",
-        "turn": 0,
-        "right_item": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0,
-          "yaw": 0.0,
-          "roll": 0.0,
-          "pitch": 0.0
-        }
-      },
-      {
-        "tick": 0,
-        "easing": "EASEINOUTQUAD",
-        "turn": 0,
-        "left_item": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0,
-          "yaw": 0.0,
-          "roll": 0.0,
-          "pitch": 0.0
-        }
-      },
-      {
         "tick": 1,
         "easing": "EASEINOUTQUAD",
         "turn": 0,
@@ -133,32 +107,6 @@
         }
       },
       {
-        "tick": 1,
-        "easing": "EASEINOUTQUAD",
-        "turn": 0,
-        "right_item": {
-          "yaw": -0.8065326809883118,
-          "roll": 0.8421920537948608,
-          "pitch": -1.3321815729141235,
-          "x": -5.7751,
-          "y": -8.2187,
-          "z": 1.9844
-        }
-      },
-      {
-        "tick": 1,
-        "easing": "EASEINOUTQUAD",
-        "turn": 0,
-        "left_item": {
-          "yaw": 0.4194335639476776,
-          "roll": 0.40830591320991516,
-          "pitch": -0.6156666278839111,
-          "x": 3.2579,
-          "y": -5.696,
-          "z": 2.5882
-        }
-      },
-      {
         "tick": 10,
         "easing": "EASEINOUTQUAD",
         "turn": 0,
@@ -252,32 +200,6 @@
         "turn": 0,
         "leftArm": {
           "x": 5.007277965545654
-        }
-      },
-      {
-        "tick": 10,
-        "easing": "EASEINOUTQUAD",
-        "turn": 0,
-        "right_item": {
-          "yaw": -0.8065326809883118,
-          "roll": 0.8421920537948608,
-          "pitch": -1.3321815729141235,
-          "x": -5.7751,
-          "y": -8.2187,
-          "z": 1.9844
-        }
-      },
-      {
-        "tick": 10,
-        "easing": "EASEINOUTQUAD",
-        "turn": 0,
-        "left_item": {
-          "yaw": 0.4194335639476776,
-          "roll": 0.40830591320991516,
-          "pitch": -0.6156666278839111,
-          "x": 3.2579,
-          "y": -5.696,
-          "z": 2.5882
         }
       }
     ]

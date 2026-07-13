@@ -1,5 +1,12 @@
 # Dinamyc Combat - Changelog
 
+## v1.0.0-beta.69 (2026-07-12)
+- Back to HANDS_ONLY mode with generated right_item keyframes from arm rotation data
+- right_item now has position values derived from arm yaw/pitch/roll (hand arc motion)
+- Added tick 0 and tick 15 right_item keyframes for smooth animation start/recovery
+- First person: only item visible, no arms, but item moves through space like the hand in third person
+- Removed generated scripts
+
 ## v1.0.0-beta.68 (2026-07-12)
 - Switched to THIRD_PERSON_MODEL — full player model renders in first person
 - Right arm, right item, and armor visible in first person (left arm/item hidden)

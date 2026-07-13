@@ -1,5 +1,13 @@
 # Dinamyc Combat - Changelog
 
+## v1.0.0-beta.71 (2026-07-13)
+- Custom FirstPersonItemRendererMixin: computes item position+rotation from right_arm bone at runtime
+- Position derived from arm rotation (sin(yaw)*arm_length for hand arc) — item swings through space like the hand
+- Rotation applied directly from arm bone (same as HANDS_ONLY_ARM)
+- PAC set to NONE mode — our mixin handles all first-person transforms
+- JSON right_item data kept as small deltas for correct third-person rendering only
+- First-person weapon now moves in a visible arc matching the third-person arm swing
+
 ## v1.0.0-beta.70 (2026-07-13)
 - Switched to HANDS_ONLY_ARM with setArmRotationScale(1.0f) — PAC applies arm rotation directly to item (no position offset)
 - Restored original Better Combat right_item deltas for third-person use only

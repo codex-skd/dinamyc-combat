@@ -27,8 +27,7 @@ public class ClientNetwork {
 
     public static final Identifier FACTORY_ID = Identifier.fromNamespaceAndPath(DinamyCombat.MODID, "combat");
     private static final FirstPersonConfiguration FP_CONFIG = new FirstPersonConfiguration()
-            .setShowArmor(true)
-            .setArmRotationScale(1.0f);
+            .setShowArmor(true);
 
     public static void init() {
         PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(
@@ -105,7 +104,7 @@ public class ClientNetwork {
             boolean enabled = configMode == TriStateAuto.YES
                     || (configMode == TriStateAuto.AUTO
                         && ClientConfig.IS_SHOWING_ARMS_IN_FIRST_PERSON.get());
-            return enabled ? FirstPersonMode.HANDS_ONLY_ARM : FirstPersonMode.NONE;
+            return enabled ? FirstPersonMode.NONE : FirstPersonMode.NONE;
         }
 
         @Override
@@ -133,7 +132,7 @@ public class ClientNetwork {
 
     private static void applyFirstPersonConfig(PlayerAnimationController controller) {
         if (isFirstPersonEnabled()) {
-            controller.setFirstPersonMode(FirstPersonMode.HANDS_ONLY_ARM);
+            controller.setFirstPersonMode(FirstPersonMode.NONE);
             controller.setFirstPersonConfiguration(FP_CONFIG);
         } else {
             controller.setFirstPersonMode(FirstPersonMode.NONE);

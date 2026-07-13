@@ -24,7 +24,8 @@
     "client.EntityHitboxDebugRendererMixin",
     "client.ItemStackTooltipMixin",
     "client.MinecraftClientAccessor",
-    "client.MinecraftClientInject"
+    "client.MinecraftClientInject",
+    "client.FirstPersonItemRendererMixin"
   ],
   "server": [],
   "injectors": {

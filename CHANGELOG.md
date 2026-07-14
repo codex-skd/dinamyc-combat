@@ -1,5 +1,10 @@
 # Dinamyc Combat - Changelog
 
+## 0.0.0-beta.73 (2026-07-14)
+- fix: remove arm bone position from first-person mixin (was applying shoulder model-space coords)
+- fix: compute hand position from rotation only: sin(yaw)*arm_length for X, sin(pitch)*arm_length*0.6 for Y
+- fix: weapon now swings freely left-right and up-down without being anchored by shoulder position
+
 ## 0.0.0-beta.72 (2026-07-14)
 - feat: apply arm bone position (x/y/z) in FirstPersonItemRendererMixin alongside rotation
 - feat: add tick 0 rightArm/leftArm keyframes to all animation JSONs for smooth transitions

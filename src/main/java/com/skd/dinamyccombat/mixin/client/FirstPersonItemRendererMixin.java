@@ -20,6 +20,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class FirstPersonItemRendererMixin {
 
     @Unique
+    private static final float ARM_LENGTH = 8.0f;
+
+    @Unique
     private final PlayerAnimBone dinamyc_combat$rightArm = new PlayerAnimBone("right_arm");
     @Unique
     private final PlayerAnimBone dinamyc_combat$leftArm = new PlayerAnimBone("left_arm");
@@ -39,14 +42,16 @@ public class FirstPersonItemRendererMixin {
         bone.setToInitialPose();
         animManager.get3DTransform(bone);
 
-        // Position: arm bone position in model space → first-person item offset
-        // x is right-left, y is up-down, z is forward-back
-        float posX = -bone.position.x / 16.0f;
-        float posY = bone.position.y / 16.0f;
-        float posZ = bone.position.z / 16.0f;
-        poseStack.translate(posX, posY, posZ);
+        float yaw = bone.rotation.y;
+        float roll = bone.rotation.z;
+        float pitch = bone.rotation.x;
 
-        // Rotation: arm bone rotation applied to item
+        // Hand position computed from arm rotation only (not arm bone position)
+        float handX = (float)(Math.sin(yaw) * ARM_LENGTH) / 16.0f;
+        float handY = (float)(Math.sin(pitch) * ARM_LENGTH * 0.6f) / 16.0f;
+        poseStack.translate(handX, -handY, 0.0f);
+
+        // Rotation from arm bone
         if (bone.rotation.z != 0.0F)
             poseStack.mulPose(Axis.ZP.rotation(-bone.rotation.y));
         if (bone.rotation.y != 0.0F)

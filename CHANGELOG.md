@@ -1,5 +1,10 @@
 # Dinamyc Combat - Changelog
 
+## 0.0.0-beta.77 (2026-07-14)
+- feat: both arms visible in THIRD_PERSON_MODEL with correct animations
+- fix: enable showLeftArm and showLeftItem for full dual-wielding first-person view
+- Removed debug mixins (cleanup)
+
 ## 0.0.0-beta.76 (2026-07-14)
 - feat: switched to THIRD_PERSON_MODEL — full player model renders in first person
 - feat: right arm, right item, and armor visible in first person (left arm/item hidden)

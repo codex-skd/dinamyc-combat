@@ -27,8 +27,8 @@ public class ClientNetwork {
 
     public static final Identifier FACTORY_ID = Identifier.fromNamespaceAndPath(DinamyCombat.MODID, "combat");
     private static final FirstPersonConfiguration FP_CONFIG = new FirstPersonConfiguration()
-            .setShowRightArm(true).setShowLeftArm(false)
-            .setShowRightItem(true).setShowLeftItem(false)
+            .setShowRightArm(true).setShowLeftArm(true)
+            .setShowRightItem(true).setShowLeftItem(true)
             .setShowArmor(true);
 
     public static void init() {

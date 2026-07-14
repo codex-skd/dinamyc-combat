@@ -1,6 +1,11 @@
 # Dinamyc Combat - Changelog
 
-## 0.0.0-beta.74 (2026-07-14)
+## 0.0.0-beta.75 (2026-07-14)
+- fix: debug logs reveal right_arm yaw never reaches JSON keyframe values (peaks at 0.537 vs expected 0.956)
+- fix: weapon never swings left because yaw never becomes negative
+- refactor: switched from HANDS_ONLY_ARM + custom mixin to PAC HANDS_ONLY mode
+- feat: PAC applies original Better Combat right_item transforms (position+rotation pre-baked in JSONs)
+- chore: removed armRotationScale config (not used by HANDS_ONLY mode)
 - feat: upgraded to PAC beta.20 (built-in hand position from arm rotation)
 - refactor: removed custom FirstPersonItemRendererMixin entirely
 - chore: switched to FirstPersonMode.HANDS_ONLY_ARM with setArmRotationScale(1.0f)

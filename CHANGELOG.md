@@ -1,5 +1,11 @@
 # Dinamyc Combat - Changelog
 
+## 0.0.0-beta.74 (2026-07-14)
+- feat: upgraded to PAC beta.20 (built-in hand position from arm rotation)
+- refactor: removed custom FirstPersonItemRendererMixin entirely
+- chore: switched to FirstPersonMode.HANDS_ONLY_ARM with setArmRotationScale(1.0f)
+- chore: PAC now handles all first-person transforms (rotation + position from arm data)
+
 ## 0.0.0-beta.73 (2026-07-14)
 - fix: remove arm bone position from first-person mixin (was applying shoulder model-space coords)
 - fix: compute hand position from rotation only: sin(yaw)*arm_length for X, sin(pitch)*arm_length*0.6 for Y

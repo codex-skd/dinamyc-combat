@@ -1,5 +1,10 @@
 # Dinamyc Combat - Changelog
 
+## 0.0.0-beta.76 (2026-07-14)
+- feat: switched to THIRD_PERSON_MODEL — full player model renders in first person
+- feat: right arm, right item, and armor visible in first person (left arm/item hidden)
+- fix: first-person arm swing now matches third-person animation exactly
+
 ## 0.0.0-beta.75 (2026-07-14)
 - fix: debug logs reveal right_arm yaw never reaches JSON keyframe values (peaks at 0.537 vs expected 0.956)
 - fix: weapon never swings left because yaw never becomes negative

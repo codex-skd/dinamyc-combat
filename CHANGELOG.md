@@ -1,5 +1,11 @@
 # Dinamyc Combat - Changelog
 
+## v1.0.0-beta.72 (2026-07-13)
+- Added tick 0 rightArm/leftArm keyframes to all animation JSONs (smooth transition from default pose)
+- FirstPersonItemRendererMixin now applies arm bone POSITION (x/y/z) in addition to rotation
+- Position captures the shoulder movement during the swing, completing the full hand arc
+- First-person weapon now matches third-person arm swing: rotation + shoulder position together reproduce the full motion
+
 ## v1.0.0-beta.71 (2026-07-13)
 - Custom FirstPersonItemRendererMixin: computes item position+rotation from right_arm bone at runtime
 - Position derived from arm rotation (sin(yaw)*arm_length for hand arc) — item swings through space like the hand

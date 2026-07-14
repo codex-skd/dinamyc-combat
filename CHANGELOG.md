@@ -1,6 +1,14 @@
 # Dinamyc Combat - Changelog
 
-## v1.0.0-beta.72 (2026-07-13)
+## 0.0.0-beta.72 (2026-07-14)
+- feat: apply arm bone position (x/y/z) in FirstPersonItemRendererMixin alongside rotation
+- feat: add tick 0 rightArm/leftArm keyframes to all animation JSONs for smooth transitions
+- fix: first-person weapon now completes full swing arc matching third-person arm motion
+- docs: add WORKFLOW.md with development conventions
+- chore: align version format to 0.0.0-beta.X in gradle.properties
+- feat: add curseforge/ files for project description and version release notes
+
+## v1.0.0-beta.71 (2026-07-13)
 - Added tick 0 rightArm/leftArm keyframes to all animation JSONs (smooth transition from default pose)
 - FirstPersonItemRendererMixin now applies arm bone POSITION (x/y/z) in addition to rotation
 - Position captures the shoulder movement during the swing, completing the full hand arc

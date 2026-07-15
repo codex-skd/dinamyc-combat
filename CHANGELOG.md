@@ -1,5 +1,10 @@
 # Dinamyc Combat - Changelog
 
+## 0.0.0-beta.78 (2026-07-15)
+- feat: velocidad de animación según la velocidad de ataque del arma
+- feat: animaciones más rápidas para armas rápidas (espadas), más lentas para armas lentas (hachas)
+- refactor: usar `triggerAnimation(animId, speed)` de PAC para control de velocidad
+
 ## 0.0.0-beta.77 (2026-07-14)
 - feat: both arms visible in THIRD_PERSON_MODEL with correct animations
 - fix: enable showLeftArm and showLeftItem for full dual-wielding first-person view

@@ -22,6 +22,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Avatar;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 
 public class ClientNetwork {
 
@@ -60,7 +61,14 @@ public class ClientNetwork {
 
             Identifier animId = Identifier.tryParse(packet.animationName());
             if (animId != null && PlayerAnimResources.hasAnimation(animId)) {
-                controller.triggerAnimation(animId);
+                float speed = 1.0f;
+                if (entity instanceof net.minecraft.world.entity.player.Player player) {
+                    double attackSpeed = player.getAttributeValue(Attributes.ATTACK_SPEED);
+                    if (attackSpeed > 0) {
+                        speed = (float)attackSpeed;
+                    }
+                }
+                controller.triggerAnimation(animId, speed);
             }
         });
     }

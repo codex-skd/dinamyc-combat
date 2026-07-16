@@ -1,5 +1,12 @@
 # Dinamyc Combat - Changelog
 
+## 0.0.0-beta.81 (2026-07-16)
+- docs: actualizar WORKFLOW.md con ramas y nuevo formato de tags
+- chore: tags ahora siguen formato `<mc-version>-neoforge-beta.X`
+- feat: THIRD_PERSON_MODEL con ambos brazos visibles y animaciones correctas
+- feat: armadura visible en todas las perspectivas
+- refactor: nombre del JAR sigue formato `<mod_id>-<minecraft_version>-<framework>-<version>.jar`
+
 ## 0.0.0-beta.80 (2026-07-15)
 - fix: revertir control de velocidad (SpeedModifier rompía animaciones)
 - feat: THIRD_PERSON_MODEL con ambos brazos visibles y animaciones correctas

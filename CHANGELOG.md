@@ -1,5 +1,10 @@
 # Dinamyc Combat - Changelog
 
+## 0.0.0-beta.79 (2026-07-15)
+- fix: revert triggerAnimation con float, usar SpeedModifier en su lugar
+- feat: SpeedModifier escala la velocidad según attack speed del arma
+- fix: eliminar SpeedModifier previo antes de añadir nuevo (evita acumulación)
+
 ## 0.0.0-beta.78 (2026-07-15)
 - feat: velocidad de animación según la velocidad de ataque del arma
 - feat: animaciones más rápidas para armas rápidas (espadas), más lentas para armas lentas (hachas)

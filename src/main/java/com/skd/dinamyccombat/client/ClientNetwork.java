@@ -12,6 +12,7 @@ import com.skd.playeranimationcore.animation.PlayerAnimResources;
 import com.skd.playeranimationcore.animation.PlayerAnimationController;
 import com.skd.playeranimationcore.animation.layered.IAnimation;
 import com.skd.playeranimationcore.animation.layered.modifier.MirrorIfLeftHandModifier;
+import com.skd.playeranimationcore.animation.layered.modifier.SpeedModifier;
 import com.skd.playeranimationcore.api.PlayerAnimationAccess;
 import com.skd.playeranimationcore.api.PlayerAnimationFactory;
 import com.skd.playeranimationcore.api.firstPerson.FirstPersonConfiguration;
@@ -68,7 +69,9 @@ public class ClientNetwork {
                         speed = (float)attackSpeed;
                     }
                 }
-                controller.triggerAnimation(animId, speed);
+                controller.removeModifierIf(m -> m instanceof SpeedModifier);
+                controller.addModifierBefore(new SpeedModifier(speed));
+                controller.triggerAnimation(animId);
             }
         });
     }

@@ -12,7 +12,6 @@ import com.skd.playeranimationcore.animation.PlayerAnimResources;
 import com.skd.playeranimationcore.animation.PlayerAnimationController;
 import com.skd.playeranimationcore.animation.layered.IAnimation;
 import com.skd.playeranimationcore.animation.layered.modifier.MirrorIfLeftHandModifier;
-import com.skd.playeranimationcore.animation.layered.modifier.SpeedModifier;
 import com.skd.playeranimationcore.api.PlayerAnimationAccess;
 import com.skd.playeranimationcore.api.PlayerAnimationFactory;
 import com.skd.playeranimationcore.api.firstPerson.FirstPersonConfiguration;
@@ -23,7 +22,6 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Avatar;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 
 public class ClientNetwork {
 
@@ -62,15 +60,6 @@ public class ClientNetwork {
 
             Identifier animId = Identifier.tryParse(packet.animationName());
             if (animId != null && PlayerAnimResources.hasAnimation(animId)) {
-                float speed = 1.0f;
-                if (entity instanceof net.minecraft.world.entity.player.Player player) {
-                    double attackSpeed = player.getAttributeValue(Attributes.ATTACK_SPEED);
-                    if (attackSpeed > 0) {
-                        speed = (float)attackSpeed;
-                    }
-                }
-                controller.removeModifierIf(m -> m instanceof SpeedModifier);
-                controller.addModifierBefore(new SpeedModifier(speed));
                 controller.triggerAnimation(animId);
             }
         });

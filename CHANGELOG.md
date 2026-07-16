@@ -1,5 +1,10 @@
 # Dinamyc Combat - Changelog
 
+## 0.0.0-beta.80 (2026-07-15)
+- fix: revertir control de velocidad (SpeedModifier rompía animaciones)
+- feat: THIRD_PERSON_MODEL con ambos brazos visibles y animaciones correctas
+- feat: armadura visible en todas las perspectivas
+
 ## 0.0.0-beta.79 (2026-07-15)
 - fix: revert triggerAnimation con float, usar SpeedModifier en su lugar
 - feat: SpeedModifier escala la velocidad según attack speed del arma

@@ -1,5 +1,8 @@
 # Dinamyc Combat - Changelog
 
+## 0.0.0-beta.82 (2026-07-16)
+- docs: actualizar WORKFLOW.md: commits en inglés (sección Idioma)
+
 ## 0.0.0-beta.81 (2026-07-16)
 - docs: actualizar WORKFLOW.md con ramas y nuevo formato de tags
 - chore: tags ahora siguen formato `<mc-version>-neoforge-beta.X`

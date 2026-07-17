@@ -54,7 +54,7 @@ CurseForge admite **Markdown y HTML** en las descripciones y release notes. Usam
 - El HTML permite control preciso sobre espaciado, alineación y estructura visual
 - El Markdown es más limpio para listas, tablas y código
 
-Usamos HTML para la **descripción general del proyecto** (`project_description.md`), donde el control visual es más importante. Para las **release notes** (`versions/<version>.md`) usamos Markdown con emojis, que es más ligero y rápido de escribir.
+Usamos HTML tanto para la **descripción general del proyecto** (`project_description.md`) como para las **release notes** (`versions/<version>.md`), ya que el contenido de estos archivos se sube directamente a CurseForge, que renderiza HTML correctamente.
 
 #### Estructura de la descripción general
 
@@ -328,7 +328,7 @@ git push
 
 # 5. Actualizar CHANGELOG.md
 
-# 6. Commit del bump de versión (commit separado)
+# 6. Commit del bump de versión
 git add -A
 git commit -m "chore: bump version to 0.0.0-beta.3"
 

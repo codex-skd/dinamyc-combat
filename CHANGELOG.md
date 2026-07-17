@@ -1,5 +1,8 @@
 # Dinamyc Combat - Changelog
 
+## 1.0.4 (2026-07-17)
+- fix: add logoFile to neoforge.mods.toml, use logo.png as mod logo
+
 ## 1.0.3 (2026-07-17)
 - fix: sweep arc particle now spawns at eye level (was at feet)
 - fix: add missing isShowingSweepEffect translation key

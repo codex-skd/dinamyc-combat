@@ -42,7 +42,7 @@ Ejemplo: `26.1.2-neoforge-1.0.21`
 
 | Campo | Valor | Notas |
 |-------|-------|-------|
-| `displayName` | `Dinamyc Combat (1.0.0)` | Nombre visible: `display_name (version)` |
+| `displayName` | `Dinamyc Combat (1.0.1)` | Nombre visible: `display_name (version)` |
 | `changelog` | HTML (no Markdown) | Ver estructura abajo |
 | `changelogType` | `html` | Obligatorio para que se vea bien |
 | `releaseType` | `release` o `beta` | Según el tipo de versión |

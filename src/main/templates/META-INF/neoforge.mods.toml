@@ -5,6 +5,7 @@ modId="${mod_id}"
 version="${mod_version}"
 displayName="${mod_name}"
 authors="SKD"
+logoFile="dinamyc_combat.png"
 description='''
 Easy, spectacular and fun melee combat system from Minecraft Dungeons.
 Replica of BetterCombat for Minecraft 1.21.5.

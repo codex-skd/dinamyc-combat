@@ -1,5 +1,9 @@
 # Dinamyc Combat - Changelog
 
+## 1.0.3 (2026-07-17)
+- fix: sweep arc particle now spawns at eye level (was at feet)
+- fix: add missing isShowingSweepEffect translation key
+
 ## 1.0.2 (2026-07-17)
 - fix: same as 1.0.1 with cleaned effects (sweep arc only)
 - refactor: removed unused particle textures, JSONs, and SwingArc class

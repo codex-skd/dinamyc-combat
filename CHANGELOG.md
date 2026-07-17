@@ -1,5 +1,13 @@
 # Dinamyc Combat - Changelog
 
+## 1.0.0 (2026-07-17)
+- feat: first stable release with full first-person animation support
+- feat: configurable arm visibility during attacks (`isShowingArmsInFirstPerson`)
+- feat: SpeedModifier with weapon attack speed from Attributes.ATTACK_SPEED
+- fix: off-hand mining prevention checks both hands via isWeapon()
+- fix: dynamic first-person mode — THIRD_PERSON_MODEL during attacks, NONE otherwise
+- update: PAC dependency to 1.0.0
+
 ## 0.0.0-beta.83 (2026-07-16)
 - fix: prevent mining with weapons in off-hand (check both hands)
 - feat: SpeedModifier con attack speed del arma (animaciones más rápidas)

@@ -35,6 +35,21 @@
 <h3>🛡️ Armor Always Visible</h3>
 <p>Armor renders correctly in all perspectives — no more invisible armor during attacks.</p>
 
+<h3>⚙️ Configurable</h3>
+<p>Full client-side configuration screen (accessible via Mods → Dinamyc Combat → Config):</p>
+<ul>
+<li><strong>First-person arms</strong> — toggle arm visibility during attacks (<code>isShowingArmsInFirstPerson</code>)</li>
+<li><strong>Second hand</strong> — show/hide the off-hand or two-handed weapon in first person (<code>isShowingOtherHandFirstPerson</code>)</li>
+<li><strong>Hold-to-attack</strong> — hold click for continuous attacks, or tap for single strikes</li>
+<li><strong>Mining with weapons</strong> — allow/prevent mining while holding a weapon</li>
+<li><strong>Swing through grass</strong> — attack through plants when targeting an enemy</li>
+<li><strong>Weapon trails</strong> — toggle swing trail particles</li>
+<li><strong>Weapon swing sounds</strong> — adjust volume or disable</li>
+<li><strong>Crosshair highlight</strong> — visual indicator when targeting enemies</li>
+<li><strong>Attack range tooltip</strong> — show weapon reach in item tooltips</li>
+<li><strong>Axe as weapon</strong> — treat axes as combat weapons with full animation support</li>
+</ul>
+
 <br>
 
 <h2>📋 Requirements</h2>
@@ -42,7 +57,7 @@
 <table>
 <tr><td><strong>Minecraft</strong></td><td>26.1.2</td></tr>
 <tr><td><strong>NeoForge</strong></td><td>26.1.2.78+</td></tr>
-<tr><td><strong>Player Animation Core</strong></td><td>beta.19+ (included)</td></tr>
+<tr><td><strong>Player Animation Core</strong></td><td>1.0.0+ (included)</td></tr>
 </table>
 
 <br>

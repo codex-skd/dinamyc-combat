@@ -6,8 +6,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -53,7 +55,15 @@ public abstract class ClientPlayerInteractionManagerMixin {
             return false;
         }
         if (minecraft.player == null) return false;
-        var attributes = WeaponRegistry.getAttributes(minecraft.player.getMainHandItem());
+        // Check main hand
+        if (isWeapon(minecraft.player.getMainHandItem())) return true;
+        // Check off-hand
+        if (isWeapon(minecraft.player.getOffhandItem())) return true;
+        return false;
+    }
+
+    private boolean isWeapon(ItemStack stack) {
+        var attributes = WeaponRegistry.getAttributes(stack);
         if (attributes == null) return false;
         if (!ClientConfig.IS_AXE_CONSIDERED_WEAPON.get()
                 && attributes.category() != null

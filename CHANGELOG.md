@@ -1,5 +1,11 @@
 # Dinamyc Combat - Changelog
 
+## 0.0.0-beta.83 (2026-07-16)
+- fix: prevent mining with weapons in off-hand (check both hands)
+- feat: SpeedModifier con attack speed del arma (animaciones más rápidas)
+- feat: brazos visibles solo durante ataques (THIRD_PERSON_MODEL dinámico)
+- feat: vista vanilla cuando no se está atacando (FirstPersonMode.NONE)
+
 ## 0.0.0-beta.82 (2026-07-16)
 - docs: actualizar WORKFLOW.md: commits en inglés (sección Idioma)
 

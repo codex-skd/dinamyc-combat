@@ -12,6 +12,7 @@ import com.skd.playeranimationcore.animation.PlayerAnimResources;
 import com.skd.playeranimationcore.animation.PlayerAnimationController;
 import com.skd.playeranimationcore.animation.layered.IAnimation;
 import com.skd.playeranimationcore.animation.layered.modifier.MirrorIfLeftHandModifier;
+import com.skd.playeranimationcore.animation.layered.modifier.SpeedModifier;
 import com.skd.playeranimationcore.api.PlayerAnimationAccess;
 import com.skd.playeranimationcore.api.PlayerAnimationFactory;
 import com.skd.playeranimationcore.api.firstPerson.FirstPersonConfiguration;
@@ -22,6 +23,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Avatar;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 
 public class ClientNetwork {
 
@@ -60,6 +62,14 @@ public class ClientNetwork {
 
             Identifier animId = Identifier.tryParse(packet.animationName());
             if (animId != null && PlayerAnimResources.hasAnimation(animId)) {
+                // Add speed modifier based on weapon attack speed
+                if (entity instanceof net.minecraft.world.entity.player.Player player) {
+                    float speed = (float)player.getAttributeValue(Attributes.ATTACK_SPEED);
+                    if (speed > 0 && Float.isFinite(speed)) {
+                        controller.removeModifierIf(m -> m instanceof SpeedModifier);
+                        controller.addModifierBefore(new SpeedModifier(speed));
+                    }
+                }
                 controller.triggerAnimation(animId);
             }
         });
@@ -99,14 +109,14 @@ public class ClientNetwork {
 
         @Override
         public FirstPersonMode getFirstPersonMode() {
-            FirstPersonMode hardSet = super.getFirstPersonMode();
-            if (hardSet != FirstPersonMode.NONE) return hardSet;
-
-            var configMode = ClientConfig.FIRST_PERSON_ANIMATIONS.get();
-            boolean enabled = configMode == TriStateAuto.YES
-                    || (configMode == TriStateAuto.AUTO
-                        && ClientConfig.IS_SHOWING_ARMS_IN_FIRST_PERSON.get());
-            return enabled ? FirstPersonMode.THIRD_PERSON_MODEL : FirstPersonMode.NONE;
+            // Respect config: if disabled, return NONE
+            if (!isFirstPersonEnabled()) return FirstPersonMode.NONE;
+            // Show arms only during attack animations
+            if (isAttackAnimationPlaying(this.avatar)) {
+                return FirstPersonMode.THIRD_PERSON_MODEL;
+            }
+            // Vanilla view when not attacking
+            return FirstPersonMode.NONE;
         }
 
         @Override

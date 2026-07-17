@@ -1,6 +1,7 @@
 package com.skd.dinamyccombat.client;
 
 import com.skd.dinamyccombat.DinamyCombat;
+import com.skd.dinamyccombat.client.effect.WeaponEffectManager;
 import com.skd.dinamyccombat.config.ClientConfig;
 import com.skd.dinamyccombat.config.TriStateAuto;
 import com.skd.dinamyccombat.logic.AnimatedHand;
@@ -28,8 +29,12 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 public class ClientNetwork {
 
     public static final Identifier FACTORY_ID = Identifier.fromNamespaceAndPath(DinamyCombat.MODID, "combat");
-    private static final FirstPersonConfiguration FP_CONFIG = new FirstPersonConfiguration()
+    private static final FirstPersonConfiguration FP_CONFIG_SHOW = new FirstPersonConfiguration()
             .setShowRightArm(true).setShowLeftArm(true)
+            .setShowRightItem(true).setShowLeftItem(true)
+            .setShowArmor(true);
+    private static final FirstPersonConfiguration FP_CONFIG_HIDE = new FirstPersonConfiguration()
+            .setShowRightArm(false).setShowLeftArm(false)
             .setShowRightItem(true).setShowLeftItem(true)
             .setShowArmor(true);
 
@@ -62,13 +67,13 @@ public class ClientNetwork {
 
             Identifier animId = Identifier.tryParse(packet.animationName());
             if (animId != null && PlayerAnimResources.hasAnimation(animId)) {
-                // Add speed modifier based on weapon attack speed
                 if (entity instanceof net.minecraft.world.entity.player.Player player) {
                     float speed = (float)player.getAttributeValue(Attributes.ATTACK_SPEED);
                     if (speed > 0 && Float.isFinite(speed)) {
                         controller.removeModifierIf(m -> m instanceof SpeedModifier);
                         controller.addModifierBefore(new SpeedModifier(speed));
                     }
+                    WeaponEffectManager.startAttack(player, packet.animationName());
                 }
                 controller.triggerAnimation(animId);
             }
@@ -111,10 +116,7 @@ public class ClientNetwork {
         public FirstPersonMode getFirstPersonMode() {
             if (!isFirstPersonEnabled()) return FirstPersonMode.NONE;
             if (isAttackAnimationPlaying(this.avatar)) {
-                // Respect client config: show arms or keep vanilla view
-                if (ClientConfig.IS_SHOWING_ARMS_IN_FIRST_PERSON.get()) {
-                    return FirstPersonMode.THIRD_PERSON_MODEL;
-                }
+                return FirstPersonMode.THIRD_PERSON_MODEL;
             }
             return FirstPersonMode.NONE;
         }
@@ -123,15 +125,16 @@ public class ClientNetwork {
         public FirstPersonConfiguration getFirstPersonConfiguration() {
             FirstPersonConfiguration hardSet = super.getFirstPersonConfiguration();
             if (hardSet != IAnimation.DEFAULT_FIRST_PERSON_CONFIG) return hardSet;
-            return FP_CONFIG;
+            if (ClientConfig.IS_SHOWING_ARMS_IN_FIRST_PERSON.get()) {
+                return FP_CONFIG_SHOW;
+            }
+            return FP_CONFIG_HIDE;
         }
     }
 
     public static boolean isFirstPersonEnabled() {
-        var configMode = ClientConfig.FIRST_PERSON_ANIMATIONS.get();
-        return configMode == TriStateAuto.YES
-                || (configMode == TriStateAuto.AUTO
-                    && ClientConfig.IS_SHOWING_ARMS_IN_FIRST_PERSON.get());
+        return ClientConfig.FIRST_PERSON_ANIMATIONS.get() == TriStateAuto.YES
+                || ClientConfig.FIRST_PERSON_ANIMATIONS.get() == TriStateAuto.AUTO;
     }
 
     public static boolean isAttackAnimationPlaying(Avatar avatar) {
@@ -145,7 +148,9 @@ public class ClientNetwork {
     private static void applyFirstPersonConfig(PlayerAnimationController controller) {
         if (isFirstPersonEnabled()) {
             controller.setFirstPersonMode(FirstPersonMode.THIRD_PERSON_MODEL);
-            controller.setFirstPersonConfiguration(FP_CONFIG);
+            controller.setFirstPersonConfiguration(
+                    ClientConfig.IS_SHOWING_ARMS_IN_FIRST_PERSON.get()
+                            ? FP_CONFIG_SHOW : FP_CONFIG_HIDE);
         } else {
             controller.setFirstPersonMode(FirstPersonMode.NONE);
         }

@@ -39,6 +39,10 @@ public class ClientConfig {
             .comment("Show weapon swing trail particles")
             .define("isShowingWeaponTrails", true);
 
+    public static final ModConfigSpec.BooleanValue IS_SHOWING_SLASH_EFFECTS = BUILDER
+            .comment("Show visual slash arc effects during attacks")
+            .define("isShowingSlashEffects", true);
+
     public static final ModConfigSpec.BooleanValue IS_SHOWING_ARMS_IN_FIRST_PERSON = BUILDER
             .comment("Show arms in first person view during attack animations")
             .define("isShowingArmsInFirstPerson", true);

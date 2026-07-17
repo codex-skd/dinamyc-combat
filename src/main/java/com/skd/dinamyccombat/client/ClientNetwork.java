@@ -109,13 +109,13 @@ public class ClientNetwork {
 
         @Override
         public FirstPersonMode getFirstPersonMode() {
-            // Respect config: if disabled, return NONE
             if (!isFirstPersonEnabled()) return FirstPersonMode.NONE;
-            // Show arms only during attack animations
             if (isAttackAnimationPlaying(this.avatar)) {
-                return FirstPersonMode.THIRD_PERSON_MODEL;
+                // Respect client config: show arms or keep vanilla view
+                if (ClientConfig.IS_SHOWING_ARMS_IN_FIRST_PERSON.get()) {
+                    return FirstPersonMode.THIRD_PERSON_MODEL;
+                }
             }
-            // Vanilla view when not attacking
             return FirstPersonMode.NONE;
         }
 

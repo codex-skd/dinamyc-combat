@@ -1,5 +1,10 @@
 # Dinamyc Combat - Changelog
 
+## 1.0.2 (2026-07-17)
+- fix: same as 1.0.1 with cleaned effects (sweep arc only)
+- refactor: removed unused particle textures, JSONs, and SwingArc class
+- refactor: simplified WeaponEffectManager to only spawn SWEEP_ATTACK particles
+
 ## 1.0.1 (2026-07-17)
 - fix: arm visibility toggle keeps animation running (FS_CONFIG_HIDE with showRightArm=false)
 - fix: isFirstPersonEnabled() no longer depends on IS_SHOWING_ARMS_IN_FIRST_PERSON

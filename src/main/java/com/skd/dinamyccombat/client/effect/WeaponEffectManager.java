@@ -4,6 +4,7 @@ import com.skd.dinamyccombat.config.ClientConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.*;
 
@@ -31,9 +32,11 @@ public class WeaponEffectManager {
             if (player == null) { iter.remove(); continue; }
 
             if (elapsed > 0.05f && elapsed < 0.15f) {
+                Vec3 look = player.getLookAngle();
+                Vec3 pos = player.getEyePosition().add(look.scale(1.5));
                 mc.level.addParticle(
                         ParticleTypes.SWEEP_ATTACK,
-                        player.getX(), player.getY() + 1.0, player.getZ(),
+                        pos.x, pos.y, pos.z,
                         0, 0, 0
                 );
             }

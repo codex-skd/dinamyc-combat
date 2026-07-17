@@ -86,7 +86,7 @@ dependencies {
     // Cloth Config - config screen API (NeoForge 26.1 v26.1.154)
     implementation files("libs/cloth-config.jar")
     // Player Animation Library - custom player animations (1.2.4+26.1 Merged) 
-    implementation files("libs/player_animation_core-0.0.0-beta.20.jar")
+    implementation files("libs/player_animation_core-26.1.2-neoforge-1.0.0.jar")
 }
 
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {

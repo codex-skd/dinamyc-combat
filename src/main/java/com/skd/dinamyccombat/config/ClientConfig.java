@@ -35,13 +35,9 @@ public class ClientConfig {
                     "Default is red (0xFFFF0000)")
             .defineInRange("hudHighlightColor", 0xFFFF0000, Integer.MIN_VALUE, Integer.MAX_VALUE);
 
-    public static final ModConfigSpec.BooleanValue IS_SHOWING_WEAPON_TRAILS = BUILDER
-            .comment("Show weapon swing trail particles")
-            .define("isShowingWeaponTrails", true);
-
-    public static final ModConfigSpec.BooleanValue IS_SHOWING_SLASH_EFFECTS = BUILDER
-            .comment("Show visual slash arc effects during attacks")
-            .define("isShowingSlashEffects", true);
+    public static final ModConfigSpec.BooleanValue IS_SHOWING_SWEEP_EFFECT = BUILDER
+            .comment("Show sweep arc effect during attacks")
+            .define("isShowingSweepEffect", true);
 
     public static final ModConfigSpec.BooleanValue IS_SHOWING_ARMS_IN_FIRST_PERSON = BUILDER
             .comment("Show arms in first person view during attack animations")

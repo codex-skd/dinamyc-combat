@@ -43,8 +43,7 @@
 <li><strong>Hold-to-attack</strong> — hold click for continuous attacks, or tap for single strikes</li>
 <li><strong>Mining with weapons</strong> — allow/prevent mining while holding a weapon</li>
 <li><strong>Swing through grass</strong> — attack through plants when targeting an enemy</li>
-<li><strong>Weapon trails</strong> — toggle swing trail particles (<code>isShowingWeaponTrails</code>)</li>
-<li><strong>Slash effects</strong> — toggle visual arc effects during swings (<code>isShowingSlashEffects</code>)</li>
+<li><strong>Sweep arc effect</strong> — toggle the vanilla-style sweep arc visual during attacks (<code>isShowingSweepEffect</code>)</li>
 <li><strong>Weapon swing sounds</strong> — adjust volume or disable</li>
 <li><strong>Crosshair highlight</strong> — visual indicator when targeting enemies</li>
 <li><strong>Attack range tooltip</strong> — show weapon reach in item tooltips</li>

@@ -3,9 +3,7 @@
 ## 1.0.1 (2026-07-17)
 - fix: arm visibility toggle keeps animation running (FS_CONFIG_HIDE with showRightArm=false)
 - fix: isFirstPersonEnabled() no longer depends on IS_SHOWING_ARMS_IN_FIRST_PERSON
-- feat: weapon swing trail particles (isShowingWeaponTrails) — sparks along swing arc
-- feat: visual slash effects (isShowingSlashEffects) — end rod particles at weapon tip
-- feat: configurable separately — particles + slashes can be toggled independently
+- feat: sweep arc effect during attacks (isShowingSweepEffect)
 
 ## 1.0.0 (2026-07-17)
 - feat: first stable release with full first-person animation support

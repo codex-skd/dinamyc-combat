@@ -467,6 +467,8 @@ git push origin 26.1.2-neoforge-1.0.5
 
 # 8. PREGUNTAR: "¿Subir JAR a CurseForge ahora?"
 #    Solo subir si el usuario confirma.
+#    El JAR está en build/libs/dinamyc_combat-26.1.2-neoforge-1.0.5.jar
+
 # 9. Subir a CurseForge usando el script compartido
 #    powershell -File ../codex-docs/scripts/curseforge-upload.ps1
 #

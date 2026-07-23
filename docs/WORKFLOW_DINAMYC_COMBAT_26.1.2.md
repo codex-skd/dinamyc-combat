@@ -27,7 +27,8 @@
 Reglas:
 - `mod_id` en `gradle.properties` debe coincidir con el nombre del directorio del proyecto
 - El display name en `README.md` y `CHANGELOG.md` debe estar en **Title Case**
-- Las clases Java principales deben seguir el naming del `mod_id` pero en **PascalCase**
+- Las clases Java principales deben seguir el naming del `mod_id` pero en **PascalCase**:
+  - `dinamyc_combat` → clase `DinamyCombat` (respetando el mod_id existente)
 - Las config keys en camelCase
 
 ## Tipografía
@@ -50,7 +51,7 @@ Reglas:
 │   │   ├── java/<package>/             # Código fuente del mod
 │   │   ├── resources/
 │   │   │   ├── assets/<mod_id>/        # Texturas, shaders, lang, modelos...
-│   │   │   │   └── icon.png           # Logo del mod (64x64)
+│   │   │   │   └── icon.png           # Logo del mod (64x64 píxeles, referenciado en neoforge.mods.toml)
 │   │   │   ├── templates/
 │   │   │   │   └── META-INF/
 │   │   │   │       └── neoforge.mods.toml  # Template con placeholders ${...}
@@ -71,6 +72,8 @@ Reglas:
 │       ├── project_vars.md             # Variables del proyecto (ID, token, versiones)
 │       ├── project_description.md      # Descripción del proyecto
 │       └── versions/                   # Release notes por versión
+│           ├── 0.0.0-beta.1.md
+│           └── ...
 ├── CHANGELOG.md
 ├── README.md
 ├── graphify-out/                       # Knowledge Graph (generado por Graphify). Versionado en GitLab, NO va a GitHub (excluido por CI).
@@ -95,6 +98,7 @@ Las variables de cada proyecto (project ID, API token, versiones de Minecraft/Ne
 ### Formato de descripciones CurseForge
 
 CurseForge admite **Markdown y HTML** en las descripciones y release notes. Usamos ambos porque:
+
 - Se versiona junto al código en el repositorio
 - Es portátil (funciona en GitHub, GitLab, etc.)
 - El HTML permite control preciso sobre espaciado, alineación y estructura visual
@@ -102,7 +106,87 @@ CurseForge admite **Markdown y HTML** en las descripciones y release notes. Usam
 
 Usamos HTML tanto para la **descripción general del proyecto** (`project_description.md`) como para las **release notes** (`versions/<version>.md`), ya que el contenido de estos archivos se sube directamente a CurseForge, que renderiza HTML correctamente.
 
+#### Estructura de la descripción general
+
+```
+Header:    Título principal (h1 centrado) + tagline
+           Separador
+Cuerpo:    Overview en párrafos (h2)
+           Features con h3 + párrafo descriptivo cada una
+           Tabla de requisitos
+           Lista de uso
+           Separador
+Footer:    Créditos
+           Logo centrado + enlace web + eslogan
+```
+
+#### Elementos HTML disponibles
+
+| Elemento | Uso |
+|---|---|
+| `<h1 align="center">` | Título principal centrado |
+| `<h2>` | Secciones del cuerpo |
+| `<h3>` | Subsecciones (cada feature) |
+| `<p>` | Párrafos con espaciado natural |
+| `<br>` | Saltos de línea para separar bloques |
+| `<hr>` | Separadores visuales entre secciones |
+| `<table>` | Datos estructurados (requisitos) |
+| `<ol>` / `<ul>` | Listas ordenadas y sin orden |
+| `<img>` | Logos e imágenes |
+| `<a>` | Enlaces externos |
+| `<code>` | Comandos y rutas técnicas |
+| `<blockquote>` | Notas destacadas |
+| `<strong>` / `<em>` | Negritas y cursivas |
+| `<p align="center">` | Bloques centrados (footer) |
+
+#### Buenas prácticas
+
+- **Respetar la estructura**: Header → Cuerpo → Footer, con separadores visuales
+- **Interlineado**: Usar `<br>` entre bloques, no acumular párrafos seguidos
+- **Títulos diferenciados**: h1 muy visible (centrado), h2 para secciones, h3 para cada feature
+- **Logo en el footer**: Centrado, con enlace a la web y eslogan
+- **Sin carácter retroactivo**: Solo aplicamos el formato a nuevas versiones; las existentes no se modifican
+- **Idioma**: CurseForge en **inglés** (en-US) — plataforma global
+
+#### Formato del changelog
+
+El changelog se envía en formato **HTML**, no Markdown. Aunque CurseForge acepta ambos, el HTML se renderiza correctamente en el editor WYSIWYG sin escapes ni caracteres rotos.
+
+| Campo | Valor |
+|---|---|
+| `changelogType` | `html` |
+| `changelog` | Código HTML con `<h2>`, `<h3>`, `<ul>/<li>`, `<p>`, `<strong>`, `<code>`, `<blockquote>` |
+
 **Regla importante**: El valor del campo `changelog` en la subida a CurseForge debe ser **exactamente el contenido del archivo** `docs/curseforge/versions/<version>.md`. No resumir, no modificar, no acortar. El archivo ya contiene el HTML que se envía.
+
+#### Ejemplo de estructura HTML para release notes
+
+```html
+<h2>v0.0.0-beta.X - Titulo descriptivo</h2>
+
+<h3>Fix</h3>
+<ul>
+<li><strong>Issue</strong>: description with <code>code</code>.</li>
+</ul>
+
+<h3>Technical Changes</h3>
+<ul>
+<li><code>Class.method()</code> — description.</li>
+</ul>
+```
+
+#### Elementos HTML permitidos
+
+| Elemento | Uso |
+|---|---|
+| `<h2>` | Título principal de la versión |
+| `<h3>` | Subsecciones (Fix, Technical Changes, Notes) |
+| `<ul><li>` | Listas de puntos |
+| `<strong>` | Negritas para resaltar |
+| `<code>` | Código o nombres técnicos |
+| `<blockquote>` | Notas importantes para servidores |
+| `<hr>` | Separador |
+| `<p>` | Párrafos |
 
 ---
 
@@ -112,7 +196,7 @@ Usamos HTML tanto para la **descripción general del proyecto** (`project_descri
 
 | Rama | Propósito |
 |---|---|---|
-| `main` | Ya no existe. La default ahora es `*/production` |
+| `main` | ~~Eliminar.~~ Ya no existe. La default ahora es `*/production` |
 | `minecraft/<mc-version>/neoforge-<neo-version>/production` | **Rama por defecto**. Rama de trabajo con todo el proyecto: código, docs/, lib_ext/, graphify-out/, tokens reales |
 | `minecraft/<mc-version>/neoforge-<neo-version>/main` | **Rama protegida**. Recibe el mirror a GitHub. Solo contiene código fuente compilable. Se actualiza vía CI/CD con force push |
 
@@ -131,22 +215,24 @@ GitLab (privado)                         GitHub (público)
 minecraft/X/N/production
   (código + docs/ + lib_ext/             minecraft/X/N/main
    + graphify-out/ + tokens)              (solo código + libs/
-        │                                   + README + placeholders)
-        │  CI/CD: filtra, sanitiza,
-        │  commitea con force push
-        ▼  a la rama */main hermana
-   minecraft/X/N/main ──────────────────→ minecraft/X/N/main
-        │         (mirror push automático)
-        ▼
+       │                                   + README + placeholders)
+       │  CI/CD: filtra, sanitiza,
+       │  commitea con force push
+       ▼  a la rama */main hermana
+  minecraft/X/N/main ──────────────────→ minecraft/X/N/main
+       │         (mirror push automático)
+       ▼
     GitHub: minecraft/X/N/main
     (espejo exacto de GitLab)
 ```
+
+Cada versión de Minecraft/NeoForge tiene su propio par `production` ↔ `main`. El mirror de GitLab replica **todas** las ramas `*/main` a GitHub automáticamente.
 
 ### Inicialización única de cada rama `*/main`
 
 Cada vez que se crea una rama `production` para una nueva versión, la agente (sesión) debe crear su hermana `main` inmediatamente después. Sin este paso, el CI/CD fallará (ya no la crea automáticamente).
 
-> La rama `main` raíz (vacía) debe eliminarse. La rama por defecto del repositorio debe ser `*/production`. Si GitLab no permite borrar la rama por defecto, cámbiala primero a `*/production` en Settings → Repository → Default branch.
+> La rama `main` raíz (vacía) puede y debe eliminarse. La rama por defecto del repositorio debe ser `*/production`. Si GitLab no permite borrar la rama por defecto, cámbiala primero a `*/production` en Settings → Repository → Default branch.
 
 **Responsabilidades:**
 
@@ -198,6 +284,7 @@ Esto solo se hace **una vez por versión**. A partir de ahí el CI/CD mantiene `
 - Al preparar una subida a CurseForge
 
 La versión se define en `gradle.properties`:
+
 ```properties
 mod_version=1.0.4
 ```
@@ -211,6 +298,7 @@ El JAR generado sigue el formato `<mod_id>-<minecraft_version>-<framework>-<mod_
 | `dinamyc_combat-26.1.2-neoforge-1.0.4.jar` | NeoForge 26.1.2, release 1.0.4 |
 
 El framework puede ser `neoforge`, `forge` o `fabric` según corresponda. Se configura en `build.gradle`:
+
 ```groovy
 base {
     archivesName = "${mod_id}-${minecraft_version}-neoforge"
@@ -395,9 +483,7 @@ publish-public:
 | `graphify-out/` | ✅ | ❌ (excluido por CI) |
 | `build/` | ❌ (.gitignore) | ❌ |
 
----
-
-## Flujo completo (paso a paso)
+--- (paso a paso)
 
 ### 1. Desarrollo
 
@@ -431,7 +517,7 @@ git push
 
 # 3. Si el usuario confirma:
 #    cp build/libs/dinamyc_combat-26.1.2-neoforge-1.0.4.jar /ruta/a/la/instancia/mods/
-#    rm /ruta/a/la/instancia/mods/dinamyc_combat-26.1.2-neoforge-1.0.3.jar
+#    rm /ruta/a/la/instancia/mods/dinamyc_combat-26.1.2-neoforge-version-anterior.jar
 ```
 
 ### 3. Probar en instancia
@@ -492,7 +578,11 @@ Después de cada push a remoto, actualizar el grafo de conocimiento:
 
 ```bash
 # 1. Regenerar el grafo del mod
-"path\to\graphify.exe" build .
+#    Ruta al ejecutable (Windows):
+"C:\Users\llagu\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\Scripts\graphify.exe" build .
+
+#    O si graphify está en PATH:
+#    graphify build .
 
 # 2. Commit del grafo actualizado
 git add graphify-out/
@@ -547,5 +637,5 @@ El código, los logs y los commits siguen el estándar internacional de programa
 
 | Versión | Fecha | Cambios |
 |---|---|---|
-| 1.2.7 | 2026-07-23 | Sincronizado con WORKFLOW_GENERIC.md v1.2.7: ramas con roles, CI/CD con variables de grupo, script compartido de upload, historial completo |
-| 1.0.0 | 2026-07-21 | Versión inicial desde WORKFLOW_GENERIC.md: estructura completa, naming, tipografía, ramas production/main, CI/CD, Graphify, fork attribution, temp/ |
+| 1.2.7 | 2026-07-23 | Sincronizado con WORKFLOW_GENERIC.md v1.2.7 |
+| 1.0.0 | 2026-07-21 | Versión inicial desde WORKFLOW_GENERIC.md |

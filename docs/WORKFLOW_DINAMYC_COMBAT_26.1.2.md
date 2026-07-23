@@ -1,6 +1,6 @@
 # Flujo de trabajo — Dinamyc Combat (NeoForge)
 
-> **Versión del workflow**: 1.0.0 (codex-docs)
+> **Versión del workflow**: 1.2.7 (codex-docs)
 > Este archivo pertenece al proyecto **Dinamyc Combat**. Cada proyecto tiene su propio `WORKFLOW_<MOD_ID>_<MC-VERSION>.md`.
 > No es un archivo central ni template compartido. Los cambios aquí solo afectan a este proyecto.
 > Para actualizar este workflow, revisar la última versión en `codex-docs/WORKFLOW_GENERIC.md`.
@@ -90,6 +90,8 @@ Reglas:
 
 Las variables de cada proyecto (project ID, API token, versiones de Minecraft/NeoForge/Java) se documentan en `docs/curseforge/project_vars.md`. No duplicar aquí.
 
+> El API token de CurseForge es el mismo para todos los mods (token de cuenta, no de proyecto). Se copia en cada `project_vars.md` individualmente.
+
 ### Formato de descripciones CurseForge
 
 CurseForge admite **Markdown y HTML** en las descripciones y release notes. Usamos ambos porque:
@@ -109,10 +111,10 @@ Usamos HTML tanto para la **descripción general del proyecto** (`project_descri
 ### Estructura
 
 | Rama | Propósito |
-|---|---|
-| `main` | Vacía. Solo contiene un commit inicial. No se usa para desarrollo |
-| `minecraft/<mc-version>/neoforge-<neo-version>/production` | Rama de trabajo para una versión específica de Minecraft/NeoForge. Contiene todo el proyecto (incluyendo docs/, lib_ext/, graphify-out/, tokens reales) |
-| `minecraft/<mc-version>/neoforge-<neo-version>/main` | Rama pública para mirror a GitHub. Solo contiene código fuente compilable. Se actualiza automáticamente vía CI/CD desde su hermana production |
+|---|---|---|
+| `main` | Ya no existe. La default ahora es `*/production` |
+| `minecraft/<mc-version>/neoforge-<neo-version>/production` | **Rama por defecto**. Rama de trabajo con todo el proyecto: código, docs/, lib_ext/, graphify-out/, tokens reales |
+| `minecraft/<mc-version>/neoforge-<neo-version>/main` | **Rama protegida**. Recibe el mirror a GitHub. Solo contiene código fuente compilable. Se actualiza vía CI/CD con force push |
 
 ### Ejemplos
 
@@ -142,16 +144,37 @@ minecraft/X/N/production
 
 ### Inicialización única de cada rama `*/main`
 
-Al crear una nueva rama `production` para una versión, su hermana `main` debe existir en el remoto al menos una vez antes de que el CI funcione:
+Cada vez que se crea una rama `production` para una nueva versión, la agente (sesión) debe crear su hermana `main` inmediatamente después. Sin este paso, el CI/CD fallará (ya no la crea automáticamente).
+
+> La rama `main` raíz (vacía) debe eliminarse. La rama por defecto del repositorio debe ser `*/production`. Si GitLab no permite borrar la rama por defecto, cámbiala primero a `*/production` en Settings → Repository → Default branch.
+
+**Responsabilidades:**
+
+| Rol | Acción |
+|---|---|
+| **Agente (sesión)** | Crear la rama `*/main` desde `*/production` y pushearla |
+| **Operador (desarrollador)** | Cambiar rama por defecto a `*/production` y eliminar `main` raíz. También proteger ramas `*/main` y configurar mirror a GitHub |
+
+**1. La agente crea la rama `*/main`** (al crear `production`):
 
 ```bash
+# Ejemplo: para minecraft/26.1.2/neoforge-26.1.2.78/production
 git checkout minecraft/26.1.2/neoforge-26.1.2.78/production
 git checkout -b minecraft/26.1.2/neoforge-26.1.2.78/main
 git push origin minecraft/26.1.2/neoforge-26.1.2.78/main
 git checkout minecraft/26.1.2/neoforge-26.1.2.78/production
 ```
 
-Esto solo se hace **una vez por versión**. A partir de ahí el CI/CD se encarga de mantenerla actualizada.
+Esto solo se hace **una vez por versión**. A partir de ahí el CI/CD mantiene `*/main` actualizada con force push automático.
+
+**2. El operador configura el repositorio** (una sola vez por repo):
+
+1. **Settings → Repository → Default branch**: cambiar a `minecraft/*/neoforge-*/production` (la rama de trabajo, la que se ve al clonar)
+2. **Settings → Repository → Branches**: eliminar `main` raíz (si existe)
+3. **Settings → Repository → Protected branches**: proteger `minecraft/*/neoforge-*/main` con force push permitido (es la rama del mirror, necesita protección)
+4. **Settings → Repository → Mirroring repositories**: configurar mirror a GitHub
+
+> ⚠️  Las ramas `*/main` nunca se tocan manualmente después de creadas. Solo el CI/CD escribe en ellas con force push.
 
 ---
 
@@ -276,6 +299,18 @@ Cada vez que se hace push a una rama `production`, GitLab CI ejecuta automática
 5. Commitea con force push a la rama `*/main` hermana
 6. El mirror de GitLab replica esa rama a GitHub automáticamente
 
+### Variables de CI/CD (grupo GitLab)
+
+Estas variables se configuran en **Settings → CI/CD → Variables** a nivel de grupo `stalking-dragons/minecraft`. Así todos los proyectos del grupo tienen acceso automático sin repetirlas:
+
+| Variable | Propósito |
+|---|---|
+| `GITLAB_PUSH_TOKEN` | Token de GitLab con permisos de API y push. Usado por el CI para hacer force push a `*/main` |
+| `GH_USERNAME` | Usuario de GitHub (`santiagolosadaborrajo`) |
+| `GH_TOKEN` | Token de GitHub con permisos de push a repos. Usado para autenticar el mirror |
+
+> Los tokens personales del desarrollador se almacenan localmente en `codex-docs/secrets.md` (excluido vía `.gitignore`). No se suben al repositorio.
+
 ### Requisito previo
 
 Antes de que el CI/CD funcione, la rama `main` hermana debe existir al menos una vez en el remoto. Ver [Inicialización única de cada rama `*/main`](#inicialización-única-de-cada-rama-main).
@@ -303,16 +338,36 @@ publish-public:
     - apk add --no-cache git
     - git config user.email "ci@mods-minecraft.dev"
     - git config user.name "Mods Minecraft CI"
+
+    # Derivar la rama main: minecraft/X/N/production → minecraft/X/N/main
     - MAIN_BRANCH=$(echo "$CI_COMMIT_BRANCH" | sed 's|/production$|/main|')
     - echo "Publishing to $MAIN_BRANCH"
-    - git fetch origin "$MAIN_BRANCH" 2>/dev/null || true
-    - git checkout "$MAIN_BRANCH" || git checkout --orphan "$MAIN_BRANCH"
+
+    # Obtener la rama main hermana. Si no existe, falla — el agente debe crearla manualmente.
+    - |
+      if ! git fetch origin "$MAIN_BRANCH" 2>/dev/null; then
+        echo "ERROR: $MAIN_BRANCH no existe. Créala desde production primero."
+        exit 1
+      fi
+    - git checkout "$MAIN_BRANCH"
+
+    # Limpiar y copiar solo archivos públicos desde production
     - git rm -rf --ignore-unmatch --quiet . 2>/dev/null || true
-    - git checkout "$CI_COMMIT_SHA" -- src/ build.gradle settings.gradle gradle.properties gradlew gradlew.bat .gitignore README.md CHANGELOG.md libs/
+
+    # Archivos obligatorios (deben existir en todos los mods)
+    - git checkout "$CI_COMMIT_SHA" -- src/ build.gradle settings.gradle gradle.properties gradlew gradlew.bat .gitignore README.md CHANGELOG.md
+
+    # Archivos opcionales (pueden no existir en algunos mods)
+    - git checkout "$CI_COMMIT_SHA" -- libs/ 2>/dev/null || true
+
+    # Sanitizar secrets en gradle.properties
     - sed -i 's/^mod_version=.*/mod_version=0.0.0/' gradle.properties
     - sed -i 's/^mod_group_id=.*/mod_group_id=com\.skd\.placeholder/' gradle.properties
     - sed -i 's/^mod_curseforge_project_id=.*/mod_curseforge_project_id=/' gradle.properties
-    - sed -i 's/^mod_curseforge_token=.*/mod_curseforge_token=/' gradle.properties
+    # Nota: el API token de CurseForge está en docs/curseforge/project_vars.md,
+    # no en gradle.properties. No se sanitiza aquí porque GitLab es privado.
+
+    # Commit y push (force push a la rama main hermana)
     - git add -A
     - |
       if ! git diff --cached --quiet; then
@@ -412,7 +467,12 @@ git push origin 26.1.2-neoforge-1.0.5
 
 # 8. PREGUNTAR: "¿Subir JAR a CurseForge ahora?"
 #    Solo subir si el usuario confirma.
-#    El JAR está en build/libs/dinamyc_combat-26.1.2-neoforge-1.0.5.jar
+# 9. Subir a CurseForge usando el script compartido
+#    powershell -File ../codex-docs/scripts/curseforge-upload.ps1
+#
+#    Este script lee project_vars.md (project_id, api_token) y gradle.properties
+#    (mod_id, mod_name, mod_version) y sube el JAR automáticamente.
+#    Es el mismo script para todos los mods, vive en codex-docs.
 ```
 
 ### 5. Release estable
@@ -485,4 +545,5 @@ El código, los logs y los commits siguen el estándar internacional de programa
 
 | Versión | Fecha | Cambios |
 |---|---|---|
+| 1.2.7 | 2026-07-23 | Sincronizado con WORKFLOW_GENERIC.md v1.2.7: ramas con roles, CI/CD con variables de grupo, script compartido de upload, historial completo |
 | 1.0.0 | 2026-07-21 | Versión inicial desde WORKFLOW_GENERIC.md: estructura completa, naming, tipografía, ramas production/main, CI/CD, Graphify, fork attribution, temp/ |

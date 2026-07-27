@@ -10,12 +10,12 @@ import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.common.NeoForge;
 
-@Mod(value = DinamyCombat.MODID, dist = Dist.CLIENT)
-public class DinamyCombatClient {
-    public DinamyCombatClient(ModContainer container) {
+@Mod(value = DinamycCombat.MODID, dist = Dist.CLIENT)
+public class DinamycCombatClient {
+    public DinamycCombatClient(ModContainer container) {
         container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
         ClientNetwork.init();
-        NeoForge.EVENT_BUS.addListener(DinamyCombatClient::onClientTick);
+        NeoForge.EVENT_BUS.addListener(DinamycCombatClient::onClientTick);
     }
 
     private static void onClientTick(ClientTickEvent.Post event) {

@@ -2,7 +2,7 @@ package com.skd.dinamyccombat.utils;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import com.skd.dinamyccombat.DinamyCombat;
+import com.skd.dinamyccombat.DinamycCombat;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.Identifier;

@@ -1,6 +1,6 @@
 package com.skd.dinamyccombat.api.component;
 
-import com.skd.dinamyccombat.DinamyCombat;
+import com.skd.dinamyccombat.DinamycCombat;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
@@ -13,7 +13,7 @@ import java.util.function.UnaryOperator;
 public class BetterCombatDataComponents {
 
     private static final DeferredRegister<DataComponentType<?>> DATA_COMPONENTS =
-            DeferredRegister.create(Registries.DATA_COMPONENT_TYPE, DinamyCombat.MODID);
+            DeferredRegister.create(Registries.DATA_COMPONENT_TYPE, DinamycCombat.MODID);
 
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Identifier>> WEAPON_PRESET_ID =
             DATA_COMPONENTS.register("weapon_preset_id", () ->

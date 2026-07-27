@@ -1,6 +1,6 @@
 package com.skd.dinamyccombat.logic;
 
-import com.skd.dinamyccombat.DinamyCombat;
+import com.skd.dinamyccombat.DinamycCombat;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import org.jetbrains.annotations.Nullable;

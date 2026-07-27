@@ -1,6 +1,6 @@
 package com.skd.dinamyccombat.particle;
 
-import com.skd.dinamyccombat.DinamyCombat;
+import com.skd.dinamyccombat.DinamycCombat;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.particles.ParticleOptions;
@@ -64,7 +64,7 @@ public class BetterCombatParticles {
                 return SlashParticleEffect.STREAM_CODEC;
             }
         };
-        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Identifier.fromNamespaceAndPath(DinamyCombat.MODID, name), type);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Identifier.fromNamespaceAndPath(DinamycCombat.MODID, name), type);
         ENTRIES.add(new Entry(type, params));
         return type;
     }

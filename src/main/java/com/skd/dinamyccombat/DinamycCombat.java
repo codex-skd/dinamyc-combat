@@ -7,7 +7,7 @@ import com.skd.dinamyccombat.compat.CompatFeatures;
 import net.minecraft.server.MinecraftServer;
 import org.slf4j.Logger;
 
-public class DinamyCombat {
+public class DinamycCombat {
     public static final String MODID = "dinamyc_combat";
     public static final Logger LOGGER = LogUtils.getLogger();
 

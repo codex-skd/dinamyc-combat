@@ -6,7 +6,7 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializer;
 import com.google.gson.JsonSyntaxException;
-import com.skd.dinamyccombat.DinamyCombat;
+import com.skd.dinamyccombat.DinamycCombat;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.Identifier;
@@ -42,7 +42,7 @@ public class WeaponAttributesHelper {
             modifiers.add(new ItemAttributeModifiers.Entry(
                     Attributes.ATTACK_DAMAGE,
                     new AttributeModifier(
-                            Identifier.fromNamespaceAndPath(DinamyCombat.MODID, "weapon_damage_override"),
+                            Identifier.fromNamespaceAndPath(DinamycCombat.MODID, "weapon_damage_override"),
                             attributes.damage(),
                             AttributeModifier.Operation.ADD_VALUE
                     ),
@@ -53,7 +53,7 @@ public class WeaponAttributesHelper {
             modifiers.add(new ItemAttributeModifiers.Entry(
                     Attributes.ATTACK_SPEED,
                     new AttributeModifier(
-                            Identifier.fromNamespaceAndPath(DinamyCombat.MODID, "weapon_speed_override"),
+                            Identifier.fromNamespaceAndPath(DinamycCombat.MODID, "weapon_speed_override"),
                             attributes.speed(),
                             AttributeModifier.Operation.ADD_VALUE
                     ),
@@ -64,7 +64,7 @@ public class WeaponAttributesHelper {
             modifiers.add(new ItemAttributeModifiers.Entry(
                     Attributes.BLOCK_INTERACTION_RANGE,
                     new AttributeModifier(
-                            Identifier.fromNamespaceAndPath(DinamyCombat.MODID, "weapon_range_override"),
+                            Identifier.fromNamespaceAndPath(DinamycCombat.MODID, "weapon_range_override"),
                             attributes.attackRange(),
                             AttributeModifier.Operation.ADD_VALUE
                     ),
@@ -87,7 +87,7 @@ public class WeaponAttributesHelper {
         try {
             return GSON.fromJson(json, WeaponAttributes.class);
         } catch (JsonSyntaxException e) {
-            DinamyCombat.LOGGER.error("Failed to decode WeaponAttributes from JSON: {}", json, e);
+            DinamycCombat.LOGGER.error("Failed to decode WeaponAttributes from JSON: {}", json, e);
             return null;
         }
     }

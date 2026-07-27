@@ -1,10 +1,10 @@
 package com.skd.dinamyccombat.neoforge;
 
-import com.skd.dinamyccombat.DinamyCombat;
+import com.skd.dinamyccombat.DinamycCombat;
 import com.skd.dinamyccombat.api.component.BetterCombatDataComponents;
 import com.skd.dinamyccombat.config.ClientConfig;
 import com.skd.dinamyccombat.config.ServerConfig;
-import com.skd.dinamyccombat.neoforge.attachment.DinamyCombatPlayerAttachments;
+import com.skd.dinamyccombat.neoforge.attachment.DinamycCombatPlayerAttachments;
 import com.skd.dinamyccombat.client.ClientNetwork;
 import com.skd.dinamyccombat.network.Packets;
 import com.skd.dinamyccombat.network.ServerNetwork;
@@ -25,23 +25,23 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import net.neoforged.neoforge.registries.RegisterEvent;
 
-@Mod(DinamyCombat.MODID)
-public final class DinamyCombatNeoForge {
+@Mod(DinamycCombat.MODID)
+public final class DinamycCombatNeoForge {
     public static final DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES =
-            DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, DinamyCombat.MODID);
+            DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, DinamycCombat.MODID);
 
     public static final DeferredRegister<SoundEvent> SOUND_EVENTS =
-            DeferredRegister.create(Registries.SOUND_EVENT, DinamyCombat.MODID);
+            DeferredRegister.create(Registries.SOUND_EVENT, DinamycCombat.MODID);
 
     static {
         SoundHelper.soundKeys.forEach(key ->
-                SOUND_EVENTS.register(key, () -> SoundEvent.createVariableRangeEvent(Identifier.fromNamespaceAndPath(DinamyCombat.MODID, key))));
+                SOUND_EVENTS.register(key, () -> SoundEvent.createVariableRangeEvent(Identifier.fromNamespaceAndPath(DinamycCombat.MODID, key))));
     }
 
-    public DinamyCombatNeoForge(IEventBus modEventBus, ModContainer modContainer) {
-        DinamyCombat.init();
+    public DinamycCombatNeoForge(IEventBus modEventBus, ModContainer modContainer) {
+        DinamycCombat.init();
         BetterCombatDataComponents.init(modEventBus);
-        DinamyCombatPlayerAttachments.init(ATTACHMENT_TYPES);
+        DinamycCombatPlayerAttachments.init(ATTACHMENT_TYPES);
         modEventBus.addListener(RegisterEvent.class, event -> {
             if (event.getRegistryKey() == Registries.PARTICLE_TYPE) {
                 BetterCombatParticles.register();
@@ -53,7 +53,7 @@ public final class DinamyCombatNeoForge {
         modContainer.registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
 
         modEventBus.addListener(RegisterPayloadHandlersEvent.class, event -> {
-            var registrar = event.registrar(DinamyCombat.MODID).versioned("1");
+            var registrar = event.registrar(DinamycCombat.MODID).versioned("1");
             registrar.playToServer(Packets.C2S_AttackRequest.PACKET_ID, Packets.C2S_AttackRequest.CODEC,
                     (packet, context) -> {
                         ServerPlayer player = (ServerPlayer) context.player();

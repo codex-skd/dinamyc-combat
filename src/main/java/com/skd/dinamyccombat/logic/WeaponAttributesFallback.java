@@ -1,6 +1,6 @@
 package com.skd.dinamyccombat.logic;
 
-import com.skd.dinamyccombat.DinamyCombat;
+import com.skd.dinamyccombat.DinamycCombat;
 import com.skd.dinamyccombat.config.FallbackConfig;
 import com.skd.dinamyccombat.utils.PatternMatching;
 import net.minecraft.core.component.DataComponents;

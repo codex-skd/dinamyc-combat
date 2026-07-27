@@ -8,7 +8,7 @@ import com.skd.dinamyccombat.logic.PlayerAttachments;
 
 import java.util.function.Supplier;
 
-public class DinamyCombatPlayerAttachments {
+public class DinamycCombatPlayerAttachments {
     private static Supplier<AttachmentType<String>> MAIN_HAND_IDLE_ANIM;
     private static Supplier<AttachmentType<String>> OFF_HAND_IDLE_ANIM;
 

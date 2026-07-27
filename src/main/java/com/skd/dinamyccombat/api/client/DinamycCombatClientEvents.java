@@ -6,7 +6,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 
-public class DinamyCombatClientEvents {
+public class DinamycCombatClientEvents {
 
     public static final Publisher<AttackStart> ATTACK_START = new Publisher<>();
     public static final Publisher<AttackHit> ATTACK_HIT = new Publisher<>();

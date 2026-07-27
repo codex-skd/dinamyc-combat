@@ -1,6 +1,6 @@
 package com.skd.dinamyccombat.logic;
 
-import com.skd.dinamyccombat.DinamyCombat;
+import com.skd.dinamyccombat.DinamycCombat;
 import com.skd.dinamyccombat.api.AttackHand;
 import com.skd.dinamyccombat.api.ComboState;
 import com.skd.dinamyccombat.api.WeaponAttributes;

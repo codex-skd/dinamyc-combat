@@ -1,6 +1,6 @@
 package com.skd.dinamyccombat.utils;
 
-import com.skd.dinamyccombat.DinamyCombat;
+import com.skd.dinamyccombat.DinamycCombat;
 import com.skd.dinamyccombat.api.WeaponAttributes;
 import com.skd.dinamyccombat.network.Packets;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -34,7 +34,7 @@ public class SoundHelper {
                 }
             }
         } catch (Exception e) {
-            DinamyCombat.LOGGER.error("Failed to play sound: " + sound.id(), e);
+            DinamycCombat.LOGGER.error("Failed to play sound: " + sound.id(), e);
         }
     }
 

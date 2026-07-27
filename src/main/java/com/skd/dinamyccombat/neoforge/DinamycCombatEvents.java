@@ -1,6 +1,6 @@
 package com.skd.dinamyccombat.neoforge;
 
-import com.skd.dinamyccombat.DinamyCombat;
+import com.skd.dinamyccombat.DinamycCombat;
 import com.skd.dinamyccombat.logic.WeaponRegistry;
 import com.skd.dinamyccombat.network.Packets;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -9,11 +9,11 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.server.ServerAboutToStartEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
-@EventBusSubscriber(modid = DinamyCombat.MODID)
-public class DinamyCombatEvents {
+@EventBusSubscriber(modid = DinamycCombat.MODID)
+public class DinamycCombatEvents {
     @SubscribeEvent
     public static void onServerAboutToStart(ServerAboutToStartEvent event) {
-        DinamyCombat.loadWeaponAttributes(event.getServer());
+        DinamycCombat.loadWeaponAttributes(event.getServer());
     }
 
     @SubscribeEvent

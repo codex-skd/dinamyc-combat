@@ -1,7 +1,7 @@
 package com.skd.dinamyccombat.network;
 
 import com.mojang.logging.LogUtils;
-import com.skd.dinamyccombat.DinamyCombat;
+import com.skd.dinamyccombat.DinamycCombat;
 import com.skd.dinamyccombat.api.WeaponAttributes;
 import com.skd.dinamyccombat.logic.AnimatedHand;
 import com.skd.dinamyccombat.logic.PlayerAttackHelper;

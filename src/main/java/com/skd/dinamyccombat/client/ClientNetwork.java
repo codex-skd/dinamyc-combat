@@ -1,6 +1,6 @@
 package com.skd.dinamyccombat.client;
 
-import com.skd.dinamyccombat.DinamyCombat;
+import com.skd.dinamyccombat.DinamycCombat;
 import com.skd.dinamyccombat.client.effect.WeaponEffectManager;
 import com.skd.dinamyccombat.config.ClientConfig;
 import com.skd.dinamyccombat.config.TriStateAuto;
@@ -28,7 +28,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 
 public class ClientNetwork {
 
-    public static final Identifier FACTORY_ID = Identifier.fromNamespaceAndPath(DinamyCombat.MODID, "combat");
+    public static final Identifier FACTORY_ID = Identifier.fromNamespaceAndPath(DinamycCombat.MODID, "combat");
     private static final FirstPersonConfiguration FP_CONFIG_SHOW = new FirstPersonConfiguration()
             .setShowRightArm(true).setShowLeftArm(true)
             .setShowRightItem(true).setShowLeftItem(true)
@@ -48,7 +48,7 @@ public class ClientNetwork {
     }
 
     public static void handleConfigSync(Packets.ConfigSync packet) {
-        DinamyCombat.LOGGER.info("Received config sync packet");
+        DinamycCombat.LOGGER.info("Received config sync packet");
     }
 
     public static void handleAttackAnimation(Packets.AttackAnimation packet) {

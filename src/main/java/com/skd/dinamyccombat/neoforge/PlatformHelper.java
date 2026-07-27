@@ -1,7 +1,7 @@
 package com.skd.dinamyccombat.neoforge;
 
-import com.skd.dinamyccombat.DinamyCombat;
-import com.skd.dinamyccombat.neoforge.attachment.DinamyCombatPlayerAttachments;
+import com.skd.dinamyccombat.DinamycCombat;
+import com.skd.dinamyccombat.neoforge.attachment.DinamycCombatPlayerAttachments;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import io.netty.buffer.Unpooled;
@@ -48,18 +48,18 @@ public class PlatformHelper {
     }
 
     public static String getMainHandIdleAnimation(Player player) {
-        return DinamyCombatPlayerAttachments.getMainHandIdleAnimation(player);
+        return DinamycCombatPlayerAttachments.getMainHandIdleAnimation(player);
     }
 
     public static String getOffHandIdleAnimation(Player player) {
-        return DinamyCombatPlayerAttachments.getOffHandIdleAnimation(player);
+        return DinamycCombatPlayerAttachments.getOffHandIdleAnimation(player);
     }
 
     public static void setMainHandIdleAnimation(Player player, String animation) {
-        DinamyCombatPlayerAttachments.setMainHandIdleAnimation(player, animation);
+        DinamycCombatPlayerAttachments.setMainHandIdleAnimation(player, animation);
     }
 
     public static void setOffHandIdleAnimation(Player player, String animation) {
-        DinamyCombatPlayerAttachments.setOffHandIdleAnimation(player, animation);
+        DinamycCombatPlayerAttachments.setOffHandIdleAnimation(player, animation);
     }
 }

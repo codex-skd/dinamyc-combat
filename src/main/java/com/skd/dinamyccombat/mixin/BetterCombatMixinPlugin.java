@@ -1,6 +1,6 @@
 package com.skd.dinamyccombat.mixin;
 
-import com.skd.dinamyccombat.DinamyCombat;
+import com.skd.dinamyccombat.DinamycCombat;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
@@ -12,7 +12,7 @@ public class BetterCombatMixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public void onLoad(String mixinPackage) {
-        DinamyCombat.LOGGER.info("DinamyCombat Mixin Plugin loaded for package: {}", mixinPackage);
+        DinamycCombat.LOGGER.info("DinamycCombat Mixin Plugin loaded for package: {}", mixinPackage);
     }
 
     @Override

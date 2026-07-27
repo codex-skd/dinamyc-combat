@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 import com.mojang.logging.LogUtils;
-import com.skd.dinamyccombat.DinamyCombat;
+import com.skd.dinamyccombat.DinamycCombat;
 import com.skd.dinamyccombat.api.AttributesContainer;
 import com.skd.dinamyccombat.api.WeaponAttributes;
 import com.skd.dinamyccombat.api.WeaponAttributesHelper;

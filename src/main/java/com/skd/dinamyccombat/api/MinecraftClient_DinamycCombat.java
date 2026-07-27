@@ -5,7 +5,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.EntityHitResult;
 import org.jetbrains.annotations.Nullable;
 
-public interface MinecraftClient_DinamyCombat {
+public interface MinecraftClient_DinamycCombat {
     int getComboCount();
     boolean hasTargetsInReach();
 

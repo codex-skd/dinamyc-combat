@@ -10,7 +10,7 @@
 | Convención | Uso | Ejemplo |
 |---|---|---|
 | **snake_case** | `mod_id` en gradle.properties, assets/, packages Java | `dinamyc_combat` |
-| **PascalCase** | Clases Java principales | `DinamyCombat` |
+| **PascalCase** | Clases Java principales | `DinamycCombat` |
 | **camelCase** | Variables, métodos, config keys | `isHoldToAttackEnabled` |
 | **Title Case** | Display name en README, CHANGELOG, docs, CurseForge | `Dinamyc Combat` |
 
@@ -18,7 +18,7 @@
 
 | Fichero | Formato | Ejemplo |
 |---|---|---|
-| WORKFLOW | `WORKFLOW_<MOD_ID>_<MC-VERSION>.md` | `WORKFLOW_DINAMYC_COMBAT_26.1.2.md` |
+| WORKFLOW | `WORKFLOW_<MOD_ID>_<MC-VERSION>.md` | `WORKFLOW_DINAMYC_COMBAT_26-1-2.md` |
 | CHANGELOG | `CHANGELOG.md` (fijo) | `CHANGELOG.md` |
 | README | `README.md` (fijo) | `README.md` |
 
@@ -28,7 +28,7 @@ Reglas:
 - `mod_id` en `gradle.properties` debe coincidir con el nombre del directorio del proyecto
 - El display name en `README.md` y `CHANGELOG.md` debe estar en **Title Case**
 - Las clases Java principales deben seguir el naming del `mod_id` pero en **PascalCase**:
-  - `dinamyc_combat` → clase `DinamyCombat` (respetando el mod_id existente)
+  - `dinamyc_combat` → clase `DinamycCombat` (respetando el mod_id existente)
 - Las config keys en camelCase
 
 ## Organización en el workspace
@@ -70,7 +70,7 @@ info_tab/
 - Cada `<minecraft_version>/` tiene su propio `.git/` y es un repositorio independiente en GitLab
 - El `mod_id` en `gradle.properties` debe coincidir con la carpeta padre
 - La rama default del repo es `minecraft/<mc-version>/neoforge-<neo-version>/production`
-- El nombre del workflow sigue el patrón `WORKFLOW_<MOD_ID>_<MC-VERSION>.md` (ej: `WORKFLOW_DINAMYC_COMBAT_26.1.2.md`)
+- El nombre del workflow sigue el patrón `WORKFLOW_<MOD_ID>_<MC-VERSION>.md` (ej: `WORKFLOW_DINAMYC_COMBAT_26-1-2.md`)
 
 ## Tipografía
 
@@ -108,7 +108,7 @@ info_tab/
 ├── lib_ext/                            # Librerías externas para análisis de la sesión. NO versionado (.gitignore).
 ├── temp/                               # Archivos temporales: investigaciones, prototipos, JARs extraídos, pruebas. NO versionado (.gitignore).
 ├── docs/
-│   ├── WORKFLOW_DINAMYC_COMBAT_26.1.2.md  # Este documento
+│   ├── WORKFLOW_DINAMYC_COMBAT_26-1-2.md  # Este documento
 │   └── curseforge/                    # Documentación para publicación en CurseForge
 │       ├── project_vars.md             # Variables del proyecto (ID, token, versiones)
 │       ├── project_description.md      # Descripción del proyecto

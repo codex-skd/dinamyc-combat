@@ -1,0 +1,15 @@
+package com.skd.dinamyccombat.logic;
+
+public interface ClientPlayerAttackProperties {
+    int getClientComboCount();
+    void setClientComboCount(int count);
+    int incrementAndGetComboCount(int tickCount);
+    boolean isClientAttackKeyHeld();
+    void setClientAttackKeyHeld(boolean held);
+    boolean isAnimationActive();
+    void setAnimationActive(boolean active, int endTick);
+    int getComboStep();
+    int getComboTotal();
+    void setComboState(int step, int total);
+    void markClickAttack();
+}

@@ -1,0 +1,7 @@
+{
+  "attributes": {
+    "attack_range": 0,
+    "two_handed": true,
+    "pose": "dinamyc_combat:pose_two_handed_bow"
+  }
+}

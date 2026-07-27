@@ -1,0 +1,33 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.skd.dinamyccombat.mixin",
+  "plugin": "com.skd.dinamyccombat.mixin.BetterCombatMixinPlugin",
+  "refmap": "dinamyc_combat.refmap.json",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "EnchantmentMixin",
+    "ItemStackMixin",
+    "RangedWeaponItemMixin",
+    "ServerPlayNetworkHandlerMixin",
+    "player.LivingEntityAccessor",
+    "player.LivingEntityMixin",
+    "player.PlayerEntityAccessor",
+    "player.PlayerEntityMixin",
+    "player.PlayerEntityRangeMixin",
+    "player.PlayerInventoryAccessor"
+  ],
+  "client": [
+    "client.AbstractClientPlayerEntityMixin",
+    "client.ClientPlayerEntityMixin",
+    "client.ClientPlayerInteractionManagerMixin",
+    "client.EntityHitboxDebugRendererMixin",
+    "client.ItemStackTooltipMixin",
+    "client.MinecraftClientAccessor",
+    "client.MinecraftClientInject"
+  ],
+  "server": [],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

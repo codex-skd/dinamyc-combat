@@ -1,5 +1,10 @@
 # Dinamyc Combat - Changelog
 
+## 1.0.5 (2026-07-27)
+- refactor: rename DinamyCombat → DinamycCombat (missing 'c') across all source files
+- docs: sync workflow to v1.4.0, rename to WORKFLOW_DINAMYC_COMBAT_26-1-2.md (hyphens)
+- docs: add workspace organization section from generic workflow
+
 ## 1.0.4 (2026-07-17)
 - fix: add logoFile to neoforge.mods.toml, use logo.png as mod logo
 

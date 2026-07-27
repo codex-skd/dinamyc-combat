@@ -1,6 +1,6 @@
 # Flujo de trabajo — Dinamyc Combat (NeoForge)
 
-> **Versión del workflow**: 1.4.0 (codex-docs)
+> **Versión del workflow**: 1.5.0 (codex-docs)
 > Este archivo pertenece al proyecto **Dinamyc Combat**. Cada proyecto tiene su propio `WORKFLOW_<MOD_ID>_<MC-VERSION>.md`.
 > No es un archivo central ni template compartido. Los cambios aquí solo afectan a este proyecto.
 > Para actualizar este workflow, revisar la última versión en `codex-docs/WORKFLOW_GENERIC.md`.
@@ -36,15 +36,18 @@ Reglas:
 Todos los mods siguen esta estructura en el directorio raíz (`Mods_Minecraft/`), tengan una o varias versiones de Minecraft:
 
 ```
-<mod_id>/                    # Carpeta padre del mod (solo organizativa, sin .git)
-└── <minecraft_version>/     # Proyecto real con su propio .git y repositorio GitLab
-    ├── .git/
-    ├── build.gradle
-    ├── gradle.properties
+teleport_animation/          # Único repositorio Git (un solo .git/)
+├── 1.21.1/                  # Solo existe en su rama: minecraft/1.21.1/neoforge-21.1/production
+│   ├── src/
+│   ├── docs/
+│   └── ...
+└── 26.1.2/                  # Solo existe en su rama: minecraft/26.1.2/neoforge-26.1.2/production
     ├── src/
     ├── docs/
     └── ...
 ```
+
+Cada versión de Minecraft es una **rama** dentro del mismo repositorio. La carpeta de cada versión **solo existe en su propia rama** — no hay rastro de otras versiones al cambiar de rama.
 
 Ejemplo real actual:
 
@@ -66,11 +69,12 @@ info_tab/
 ```
 
 **Reglas:**
-- La carpeta padre `<mod_id>/` es solo organizativa, **no tiene `.git`**
-- Cada `<minecraft_version>/` tiene su propio `.git/` y es un repositorio independiente en GitLab
+- `mod_id/` es el repositorio Git, contiene el `.git/`
+- Cada `<minecraft_version>/` es una subcarpeta **sin `.git/` propio**
+- Cada versión tiene su propia rama `minecraft/<mc-version>/neoforge-<neo-version>/production`
+- Cada rama solo contiene los archivos de su versión. Las carpetas de otras versiones **no existen** en esa rama
 - El `mod_id` en `gradle.properties` debe coincidir con la carpeta padre
-- La rama default del repo es `minecraft/<mc-version>/neoforge-<neo-version>/production`
-- El nombre del workflow sigue el patrón `WORKFLOW_<MOD_ID>_<MC-VERSION>.md` (ej: `WORKFLOW_DINAMYC_COMBAT_26-1-2.md`)
+- El nombre del workflow sigue el patrón `WORKFLOW_<MOD_ID>_<MC-VERSION>.md`
 
 ## Tipografía
 
@@ -678,5 +682,5 @@ El código, los logs y los commits siguen el estándar internacional de programa
 
 | Versión | Fecha | Cambios |
 |---|---|---|
+| 1.5.0 | 2026-07-27 | Sincronizado con WORKFLOW_GENERIC.md v1.5.0: repositorio único con versiones como subcarpetas |
 | 1.4.0 | 2026-07-27 | Sincronizado con WORKFLOW_GENERIC.md v1.4.0: nueva sección organización en workspace |
-| 1.2.7 | 2026-07-23 | Sincronizado con WORKFLOW_GENERIC.md v1.2.7 |

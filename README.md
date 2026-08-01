@@ -1,25 +1,27 @@
+# Dinamyc Combat
 
-Installation information
-=======
+> This mod is based on **Better Combat** by Daedelus. Not affiliated with or endorsed by the original author.
 
-This template repository can be directly cloned to get you started with a new
-mod. Simply create a new repository cloned from this one, by following the
-instructions provided by [GitHub](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template).
+Better Combat-style weapon animations for NeoForge — 33 weapon presets with full first-person support. Dinamyc Combat overhauls Minecraft's combat system with hand-crafted weapon animations: swing, stab, slam, and spin your way through enemies, each preset with its own attack pattern.
 
-Once you have your clone, simply open the repository in the IDE of your choice. The usual recommendation for an IDE is either IntelliJ IDEA or Eclipse.
+## Features
 
-If at any point you are missing libraries in your IDE, or you've run into problems you can
-run `gradlew --refresh-dependencies` to refresh the local cache. `gradlew clean` to reset everything 
-{this does not affect your code} and then start the process again.
+- **33 weapon presets**: One-handed (slash horizontal/vertical, stab, stab mounted, swipe, uppercut, slam, punch), two-handed (slash, stab, slam, spin), dual-handed (cross slash, uncross slash, stab) and pose presets (one-handed backwards, two-handed bow/crossbow/heavy/katana/polearm/scythe/sword).
+- **Hold-to-attack**: Hold click for continuous attacks, with alternating hands for dual wielding.
+- **Off-hand support**: Left-handed animations via `MirrorIfLeftHandModifier` — weapons in the off-hand automatically mirror their animations.
+- **First-person animation**: Full player model renders in first person, showing both arms, armor, and weapons with the same animations as third person.
+- **Armor always visible**: Armor renders correctly in all perspectives.
+- **Configurable**: Full client-side configuration screen (Mods → Dinamyc Combat → Config).
 
-Mapping Names:
-============
-By default, the MDK is configured to use the official mapping names from Mojang for methods and fields 
-in the Minecraft codebase. These names are covered by a specific license. All modders should be aware of this
-license. For the latest license text, refer to the mapping file itself, or the reference copy here:
-https://github.com/NeoForged/NeoForm/blob/main/Mojang.md
+## Requirements
 
-Additional Resources: 
-==========
-Community Documentation: https://docs.neoforged.net/  
-NeoForged Discord: https://discord.neoforged.net/
+- Minecraft 26.1.2
+- NeoForge 26.1.2.78+
+
+## Build
+
+```bash
+gradlew build
+```
+
+The JAR is generated at `build/libs/dinamyc_combat-26.1.2-neoforge-<version>.jar`.

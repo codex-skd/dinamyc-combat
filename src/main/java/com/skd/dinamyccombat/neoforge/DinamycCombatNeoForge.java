@@ -1,7 +1,7 @@
 package com.skd.dinamyccombat.neoforge;
 
 import com.skd.dinamyccombat.DinamycCombat;
-import com.skd.dinamyccombat.api.component.BetterCombatDataComponents;
+import com.skd.dinamyccombat.api.component.DinamycDataComponents;
 import com.skd.dinamyccombat.config.ClientConfig;
 import com.skd.dinamyccombat.config.ServerConfig;
 import com.skd.dinamyccombat.neoforge.attachment.DinamycCombatPlayerAttachments;
@@ -9,7 +9,7 @@ import com.skd.dinamyccombat.client.ClientNetwork;
 import com.skd.dinamyccombat.network.Packets;
 import com.skd.dinamyccombat.network.ServerNetwork;
 import com.skd.dinamyccombat.utils.SoundHelper;
-import com.skd.dinamyccombat.particle.BetterCombatParticles;
+import com.skd.dinamyccombat.particle.DinamycParticles;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
@@ -40,11 +40,11 @@ public final class DinamycCombatNeoForge {
 
     public DinamycCombatNeoForge(IEventBus modEventBus, ModContainer modContainer) {
         DinamycCombat.init();
-        BetterCombatDataComponents.init(modEventBus);
+        DinamycDataComponents.init(modEventBus);
         DinamycCombatPlayerAttachments.init(ATTACHMENT_TYPES);
         modEventBus.addListener(RegisterEvent.class, event -> {
             if (event.getRegistryKey() == Registries.PARTICLE_TYPE) {
-                BetterCombatParticles.register();
+                DinamycParticles.register();
             }
         });
         SOUND_EVENTS.register(modEventBus);

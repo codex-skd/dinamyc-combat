@@ -36,16 +36,16 @@ minecraft/26.2/neoforge-26.2.0.32-beta/production
 ## Tag
 
 Formato: `<mc-version>-<framework>-<version>`
-Ejemplo: `26.2-neoforge-0.0.0-beta.1`
+Ejemplo: `26.2-neoforge-1.0.0`
 
 ## Parámetros del upload
 
 | Campo | Valor | Notas |
 |-------|-------|-------|
-| `displayName` | `Dinamyc Combat (0.0.0-beta.1)` | Nombre visible: `display_name (version)` |
+| `displayName` | `Dinamyc Combat (1.0.0)` | Nombre visible: `display_name (version)` |
 | `changelog` | HTML (no Markdown) | Ver estructura abajo |
 | `changelogType` | `html` | Obligatorio para que se vea bien |
-| `releaseType` | `beta` | Primera versión de pruebas del port a 26.2 |
+| `releaseType` | `release` | Primera versión estable del port a 26.2 |
 | `gameVersions` | `[9638, 9639, 10150, 16498]` | **IDs numéricos**, no nombres (la API devuelve 400 "Expected Integer but got String" si se envían strings como `"Client"`). Ver tabla de IDs abajo |
 
 ### IDs de `gameVersions` para 26.2
@@ -67,13 +67,13 @@ Verificados contra archivos ya publicados de `utility_core` (proyecto 1601825) y
 project_id = 1600733
 api_token = ee776b0a-ee95-4850-b554-06be02a8657f
 game_versions = 9638, 9639, 10150, 16498
-release_type = beta
+release_type = release
 ```
 
 ## Estructura del changelog (HTML)
 
 ```html
-<h2>v0.0.0-beta.1 - Port to Minecraft 26.2</h2>
+<h2>v1.0.0 - First Stable Release for Minecraft 26.2</h2>
 
 <h3>Port</h3>
 <ul>
@@ -82,7 +82,7 @@ release_type = beta
 
 <hr>
 
-<p><strong>JAR</strong>: <code>dinamyc_combat-26.2-neoforge-0.0.0-beta.1.jar</code></p>
+<p><strong>JAR</strong>: <code>dinamyc_combat-26.2-neoforge-1.0.0.jar</code></p>
 ```
 
 ## Subir archivo (JAR)

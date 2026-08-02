@@ -7,6 +7,11 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.h
 
 Para el historial completo de la versión 26.1.2, ver `dinamyc_combat/26.1.2/CHANGELOG.md` (rama `minecraft/26.1.2/neoforge-26.1.2.78/production`).
 
+## [1.0.1] - 2026-08-02
+
+### Refactor
+- Clases residuales del fork "Better Combat" renombradas a naming propio: `BetterCombatDataComponents` → `DinamycDataComponents`, `BetterCombatMixinPlugin` → `DinamycMixinPlugin`, `BetterCombatParticles` → `DinamycParticles`, y método `setKnockbackMultiplier_BetterCombat` → `setKnockbackMultiplier_Dinamyc`. Sin cambios de gameplay.
+
 ## [1.0.0] - 2026-08-02
 
 ### Added

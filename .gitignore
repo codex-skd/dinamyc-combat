@@ -43,7 +43,6 @@ lib_ext/
 /run/
 /lib_ext/
 /com/
-/graphify-out/
 temp/
 nul
 

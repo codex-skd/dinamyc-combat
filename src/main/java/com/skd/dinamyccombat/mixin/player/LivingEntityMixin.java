@@ -22,7 +22,7 @@ public class LivingEntityMixin implements ConfigurableKnockback {
     private float dinamyc_combat$customKnockbackMultiplier = 1F;
 
     @Override
-    public void setKnockbackMultiplier_BetterCombat(float value) {
+    public void setKnockbackMultiplier_Dinamyc(float value) {
         dinamyc_combat$customKnockbackMultiplier = value;
     }
 

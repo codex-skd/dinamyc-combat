@@ -2,7 +2,7 @@ package com.skd.dinamyccombat.mixin;
 
 import com.skd.dinamyccombat.api.WeaponAttributes;
 import com.skd.dinamyccombat.api.WeaponAttributesHelper;
-import com.skd.dinamyccombat.api.component.BetterCombatDataComponents;
+import com.skd.dinamyccombat.api.component.DinamycDataComponents;
 import com.skd.dinamyccombat.logic.WeaponRegistry;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentPatch;
@@ -29,7 +29,7 @@ public abstract class ItemStackMixin {
         if (attributes != null && WeaponAttributesHelper.validate(attributes)) {
             var stack = (ItemStack) (Object) this;
             if (attributes.id() != null) {
-                stack.set(BetterCombatDataComponents.WEAPON_PRESET_ID.get(), Identifier.parse(attributes.id()));
+                stack.set(DinamycDataComponents.WEAPON_PRESET_ID.get(), Identifier.parse(attributes.id()));
             }
             WeaponAttributesHelper.override(stack, attributes);
         }

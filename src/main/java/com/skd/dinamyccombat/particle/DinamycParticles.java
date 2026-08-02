@@ -16,7 +16,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BetterCombatParticles {
+public class DinamycParticles {
     public record Entry(ParticleType<SlashParticleEffect> particleType, StaticParams params) {}
     public record StaticParams(int lifetime, float scale) {
         public static final StaticParams DEFAULT = new StaticParams(6, 1.5F);

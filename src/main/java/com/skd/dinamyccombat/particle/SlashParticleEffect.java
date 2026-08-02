@@ -71,6 +71,6 @@ public class SlashParticleEffect implements ParticleOptions {
 
     @Override
     public ParticleType<?> getType() {
-        return BetterCombatParticles.topstab;
+        return DinamycParticles.topstab;
     }
 }

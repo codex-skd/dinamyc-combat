@@ -8,7 +8,7 @@ import com.skd.dinamyccombat.DinamycCombat;
 import com.skd.dinamyccombat.api.AttributesContainer;
 import com.skd.dinamyccombat.api.WeaponAttributes;
 import com.skd.dinamyccombat.api.WeaponAttributesHelper;
-import com.skd.dinamyccombat.api.component.BetterCombatDataComponents;
+import com.skd.dinamyccombat.api.component.DinamycDataComponents;
 import com.skd.dinamyccombat.network.Packets;
 import com.skd.dinamyccombat.utils.CompressionHelper;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -39,7 +39,7 @@ public class WeaponRegistry {
 
     public static WeaponAttributes getAttributes(ItemStack itemStack) {
         if (itemStack == null) return null;
-        var component = itemStack.get(BetterCombatDataComponents.WEAPON_PRESET_ID);
+        var component = itemStack.get(DinamycDataComponents.WEAPON_PRESET_ID);
         if (component != null) {
             var container = containers.get(component);
             if (container != null) return container.attributes();

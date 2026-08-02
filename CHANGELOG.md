@@ -1,5 +1,8 @@
 # Dinamyc Combat - Changelog
 
+## 1.0.6 (2026-08-02)
+- refactor: renombradas clases residuales de fork "Better Combat" → `Dinamyc*` (`BetterCombatDataComponents`, `BetterCombatMixinPlugin`, `BetterCombatParticles`, método `setKnockbackMultiplier_BetterCombat`). Sin cambios de gameplay.
+
 ## 1.0.5 (2026-07-27)
 - refactor: rename DinamyCombat → DinamycCombat (missing 'c') across all source files
 - docs: sync workflow to v1.4.0, rename to WORKFLOW_DINAMYC_COMBAT_26-1-2.md (hyphens)

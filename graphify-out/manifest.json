@@ -69,11 +69,6 @@
     "ast_hash": "b9c34e2e4d304acb5cff81c8ed417ba6",
     "semantic_hash": ""
   },
-  "src/main/java/com/skd/dinamyccombat/api/component/BetterCombatDataComponents.java": {
-    "mtime": 1785630291.58846,
-    "ast_hash": "0ba0fa59fbec9902a8505bac23bf39cb",
-    "semantic_hash": ""
-  },
   "src/main/java/com/skd/dinamyccombat/api/component/WeaponAttributesIdComponent.java": {
     "mtime": 1785630291.5889616,
     "ast_hash": "2cdf179d769c3ac43304039e1fe50d4a",
@@ -210,8 +205,8 @@
     "semantic_hash": ""
   },
   "src/main/java/com/skd/dinamyccombat/logic/WeaponRegistry.java": {
-    "mtime": 1785630291.6021786,
-    "ast_hash": "b84fb15b31e109e09cf53517f81111ae",
+    "mtime": 1785706092.0674322,
+    "ast_hash": "4349766febbec6446594459a1eae2814",
     "semantic_hash": ""
   },
   "src/main/java/com/skd/dinamyccombat/logic/WeaponSwing.java": {
@@ -220,13 +215,8 @@
     "semantic_hash": ""
   },
   "src/main/java/com/skd/dinamyccombat/logic/knockback/ConfigurableKnockback.java": {
-    "mtime": 1785630291.6047857,
-    "ast_hash": "2b990cf1dd8a4d5520beacba5d97ce1c",
-    "semantic_hash": ""
-  },
-  "src/main/java/com/skd/dinamyccombat/mixin/BetterCombatMixinPlugin.java": {
-    "mtime": 1785630291.60538,
-    "ast_hash": "8372f76877de91c170f9549c9eab4bff",
+    "mtime": 1785706111.1943984,
+    "ast_hash": "0168c846ee0cbd94ca654a01e9e4ce98",
     "semantic_hash": ""
   },
   "src/main/java/com/skd/dinamyccombat/mixin/EnchantmentMixin.java": {
@@ -235,8 +225,8 @@
     "semantic_hash": ""
   },
   "src/main/java/com/skd/dinamyccombat/mixin/ItemStackMixin.java": {
-    "mtime": 1785630291.6058865,
-    "ast_hash": "7575a21a6ba904b6ae8618f26808409e",
+    "mtime": 1785706092.0730953,
+    "ast_hash": "9832414ceb77d1ecf60ea5bdb268f209",
     "semantic_hash": ""
   },
   "src/main/java/com/skd/dinamyccombat/mixin/RangedWeaponItemMixin.java": {
@@ -290,8 +280,8 @@
     "semantic_hash": ""
   },
   "src/main/java/com/skd/dinamyccombat/mixin/player/LivingEntityMixin.java": {
-    "mtime": 1785630291.6111622,
-    "ast_hash": "cdad9ff99ab887bafb21c9e5416cd4f3",
+    "mtime": 1785706111.1959276,
+    "ast_hash": "b07cd6f24ce649d0498d5a8a784bc83d",
     "semantic_hash": ""
   },
   "src/main/java/com/skd/dinamyccombat/mixin/player/PlayerEntityAccessor.java": {
@@ -320,8 +310,8 @@
     "semantic_hash": ""
   },
   "src/main/java/com/skd/dinamyccombat/neoforge/DinamycCombatNeoForge.java": {
-    "mtime": 1785630291.6132314,
-    "ast_hash": "0c3e9446ff02a7ca10947c8937703f99",
+    "mtime": 1785706092.0776706,
+    "ast_hash": "d276d47f046044b932e36de8b6fbd929",
     "semantic_hash": ""
   },
   "src/main/java/com/skd/dinamyccombat/neoforge/PlatformClientHelper.java": {
@@ -349,14 +339,9 @@
     "ast_hash": "b5a65fbbc0486a181696791c5b5b546f",
     "semantic_hash": ""
   },
-  "src/main/java/com/skd/dinamyccombat/particle/BetterCombatParticles.java": {
-    "mtime": 1785630291.616992,
-    "ast_hash": "92f92cd71a856a86ef3a3bd8fe0e803c",
-    "semantic_hash": ""
-  },
   "src/main/java/com/skd/dinamyccombat/particle/SlashParticleEffect.java": {
-    "mtime": 1785630291.6175144,
-    "ast_hash": "553968e0c74680402b70be146190e462",
+    "mtime": 1785706092.0811973,
+    "ast_hash": "e753ce3faf26c63fdebecc291514227b",
     "semantic_hash": ""
   },
   "src/main/java/com/skd/dinamyccombat/utils/AttributeModifierHelper.java": {
@@ -850,8 +835,8 @@
     "semantic_hash": ""
   },
   "src/main/resources/dinamyc_combat.mixins.json": {
-    "mtime": 1785630291.6869733,
-    "ast_hash": "bb1a38acdc10d2e5a2b940c1cc4fd613",
+    "mtime": 1785706092.1673083,
+    "ast_hash": "419c7d932328e8443784267abdc23add",
     "semantic_hash": ""
   },
   ".claude/CLAUDE.md": {
@@ -860,13 +845,13 @@
     "semantic_hash": ""
   },
   ".gitlab-ci.yml": {
-    "mtime": 1785630303.0775464,
-    "ast_hash": "74b0c68725a9770cc619ce4f85848843",
+    "mtime": 1785801080.7378266,
+    "ast_hash": "14c0a4ad0f5bec65ebfaf8c37e148365",
     "semantic_hash": ""
   },
   "CHANGELOG.md": {
-    "mtime": 1785637854.9699705,
-    "ast_hash": "2ce31f48dea32751b258e00d20d0383f",
+    "mtime": 1785972327.558214,
+    "ast_hash": "a8d11760b14dab8e4031f83ee224c141",
     "semantic_hash": ""
   },
   "README.md": {
@@ -1042,6 +1027,31 @@
   "docs/curseforge/versions/1.0.0.md": {
     "mtime": 1785637858.933697,
     "ast_hash": "777b9f368b1d87847e47850f51849a95",
+    "semantic_hash": ""
+  },
+  "src/main/java/com/skd/dinamyccombat/api/component/DinamycDataComponents.java": {
+    "mtime": 1785706092.0628152,
+    "ast_hash": "69c050a914d7a316d3b8618b00dd2912",
+    "semantic_hash": ""
+  },
+  "src/main/java/com/skd/dinamyccombat/mixin/DinamycMixinPlugin.java": {
+    "mtime": 1785706092.06995,
+    "ast_hash": "fa6b4148cbe5500f9c082abd037b9277",
+    "semantic_hash": ""
+  },
+  "src/main/java/com/skd/dinamyccombat/particle/DinamycParticles.java": {
+    "mtime": 1785706092.0796974,
+    "ast_hash": "f119e0ed43d0d178846a2537373d5af3",
+    "semantic_hash": ""
+  },
+  "docs/curseforge/versions/1.0.1.md": {
+    "mtime": 1785706196.777879,
+    "ast_hash": "9401c66785de9ac909761d940b46a710",
+    "semantic_hash": ""
+  },
+  "docs/curseforge/versions/1.0.2.md": {
+    "mtime": 1785972327.5592163,
+    "ast_hash": "5cce1837f6805163e76607f99879f46e",
     "semantic_hash": ""
   }
 }

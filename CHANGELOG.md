@@ -1,5 +1,12 @@
 # Dinamyc Combat - Changelog
 
+
+## [1.0.7] - 2026-08-12
+
+### Change
+
+- **Nombre de JAR con versión del cargador**: el artefacto ahora se compila como `dinamyc_combat-26.1.2-neoforge-26.1.2.78-1.0.7.jar` (se añade la versión de cargador/NeoForge al nombre del archivo). Empaquetado y documentación; sin cambios de funcionalidad.
+
 ## 1.0.6 (2026-08-02)
 - refactor: renombradas clases residuales de fork "Better Combat" → `Dinamyc*` (`BetterCombatDataComponents`, `BetterCombatMixinPlugin`, `BetterCombatParticles`, método `setKnockbackMultiplier_BetterCombat`). Sin cambios de gameplay.
 

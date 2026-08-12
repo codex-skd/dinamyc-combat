@@ -35,7 +35,7 @@ repositories {
 }
 
 base {
-    archivesName = "${mod_id}-${minecraft_version}-neoforge"
+    archivesName = "${mod_id}-${minecraft_version}-neoforge-${neo_version}"
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(25)

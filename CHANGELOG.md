@@ -8,6 +8,13 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.h
 Para el historial completo de la versión 26.1.2, ver `dinamyc_combat/26.1.2/CHANGELOG.md` (rama `minecraft/26.1.2/neoforge-26.1.2.78/production`).
 ---
 
+## [1.0.3] - 2026-08-12
+
+### Change
+
+- **Nombre de JAR con versión del cargador**: el artefacto ahora se compila como `dinamyc_combat-26.2-neoforge-26.2.0.37-beta-1.0.3.jar` (se añade la versión de cargador/NeoForge al nombre del archivo). Empaquetado y documentación; sin cambios de funcionalidad.
+
+
 ## [1.0.2] - 2026-08-05
 
 ### Change
